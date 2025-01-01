@@ -11,7 +11,9 @@ abstract class Routes {
   static const PLAY_LIST = _Paths.PLAY_LIST;
   static const SEARCH = _Paths.SEARCH;
   static const ERROR_SEREEN = _Paths.ERROR_SEREEN;
-
+  static const DISCOVER = _Paths.DISCOVER;
+  static const Library = _Paths.Library;
+  static const LOCAL_MUSIC = _Paths.LOCAL_MUSIC;
 }
 
 abstract class _Paths {
@@ -24,5 +26,7 @@ abstract class _Paths {
   static const PLAY_LIST = '/play-list';
   static const SEARCH = '/search';
   static const ERROR_SEREEN = '/error-sereen';
-
+  static const DISCOVER = '/discover';
+  static const Library = '/Library';
+  static const LOCAL_MUSIC = '/local-music';
 }

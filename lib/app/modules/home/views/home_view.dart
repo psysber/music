@@ -4,73 +4,67 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import 'package:music/app/component/audio_manage.dart';
 import 'package:music/app/component/notifiers/play_button_notifier.dart';
 import 'package:music/app/component/notifiers/progress_notifier.dart';
 import 'package:music/app/component/notifiers/repeat_button_notifier.dart';
-import 'package:music/app/modules/home/modules/discover.dart';
-import 'package:music/app/modules/home/modules/search_input.dart';
-
-
-import '../controllers/home_controller.dart';
-
+import 'package:music/app/modules/discover/views/discover_view.dart';
+import 'package:music/app/modules/home/controllers/home_controller.dart';
+import 'package:music/app/modules/home/modules/music_nav.dart';
+import 'package:music/app/modules/libary/views/library_view.dart';
+import 'package:music/app/modules/local_music/views/local_music_view.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    const tabs= [
+      Tab(
+        text: '推荐',
+      ),
+      Tab(
+        text: '音乐库',
+      ),
+      Tab(
+        text: '本地音乐',
+      )
+    ];
+    return DefaultTabController(
 
-
-    return   DefaultTabController(
-      //指定tabbar个数
-        length: 1,
-        initialIndex:0,
+        initialIndex: 0,
+        length: tabs.length,
         child: Scaffold(
-          drawerEnableOpenDragGesture: false,
-
-          appBar: PreferredSize(preferredSize:Size.fromHeight(45.h) ,child: AppBar(
-            title: null,
-            automaticallyImplyLeading: false,
-            bottom: const TabBar(
-
-              labelColor: Color(0xff000000),
-              labelStyle: TextStyle(fontSize: 19),
-              unselectedLabelColor: Color(0xff000000),
-              unselectedLabelStyle: TextStyle(fontSize: 13),
-              isScrollable: true,
-              indicatorColor: Color(0xff00BF00),
-              indicatorSize:TabBarIndicatorSize.label,
-              indicatorWeight:3.0,
-              tabs: <Widget>[
-                Tab(text: '推荐',),
-              ],
+            drawerEnableOpenDragGesture: false,
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(96.w),
+              child: AppBar(
+                title: null,
+                automaticallyImplyLeading: false,
+                bottom:  TabBar(
+                  labelColor: const Color(0xff000000),
+                  labelStyle: TextStyle(fontSize: 32.sp,fontWeight: FontWeight.bold),
+                  unselectedLabelColor: const Color(0xff000000),
+                  unselectedLabelStyle: TextStyle(fontSize: 26.sp),
+                  isScrollable: true,
+                  indicatorColor: const Color(0xff00BF00),
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicatorWeight: 3.0.w,
+                  tabs:tabs
+                ),
+                centerTitle: true,
+                backgroundColor: const Color(0xffffffff),
+                elevation: 0,
+              ),
             ),
-            centerTitle: true,
-            backgroundColor:Color(0xffffffff),
-            elevation: 0,
-
-          ),)
-,
-
-          body: TabBarView(
-              children:   List<Container>.generate( 1, (i) {
-                return Container(
-
-
-                  child:  Discover(),
-                );
-              })
-
-          ),
-
-        )
-    );
-
+            body: const TabBarView(
+                children: [
+              DiscoverView(),
+              LibraryView(),
+              LocalMusicView()
+            ]),
+            bottomNavigationBar: MusicNav()));
   }
-
-
 }
 
 class AudioProcessBar extends StatelessWidget {
@@ -87,7 +81,7 @@ class AudioProcessBar extends StatelessWidget {
           thumbRadius: 5,
           thumbGlowRadius: 20,
           timeLabelTextStyle: TextStyle(
-              fontSize: 10.sp,color: Theme.of(context).iconTheme.color),
+              fontSize: 10.sp, color: Theme.of(context).iconTheme.color),
           baseBarColor: const Color(0xFF120338),
           bufferedBarColor: const Color(0xFFD3ADF7),
           thumbColor: const Color(0xFF722ED1),
@@ -205,5 +199,3 @@ class RepeatButton extends StatelessWidget {
     );
   }
 }
-
-

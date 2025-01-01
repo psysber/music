@@ -7,14 +7,14 @@ class SearchInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints:
-          const BoxConstraints(maxHeight: double.infinity, maxWidth: 200),
+            BoxConstraints(maxHeight: double.infinity, maxWidth: 200.w),
       child: TextField(
         readOnly: true,
         onTap: () {
           print("jump");
         },
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
+          contentPadding:   EdgeInsets.symmetric(vertical: 4.0.w),
           hintText: '请输入搜索内容',
           prefixIcon: Icon(Icons.search),
           // contentPadding: EdgeInsets.all(10),

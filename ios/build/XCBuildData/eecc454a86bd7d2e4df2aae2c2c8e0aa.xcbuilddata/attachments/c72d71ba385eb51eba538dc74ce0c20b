@@ -1,0 +1,5 @@
+ extern const unsigned char soraplayerVersionString[];
+ extern const double soraplayerVersionNumber;
+
+ const unsigned char soraplayerVersionString[] __attribute__ ((used)) = "@(#)PROGRAM:soraplayer  PROJECT:Pods-1" "\n";
+ const double soraplayerVersionNumber __attribute__ ((used)) = (double)1.;

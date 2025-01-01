@@ -7,6 +7,8 @@ import 'package:music/app/modules/index/bindings/index_binding.dart';
 import 'package:music/app/modules/index/views/index_view.dart';
 import 'package:music/app/routes/app_pages.dart';
 
+import 'app/modules/libary/bindings/library_binding.dart';
+
 void main() {
   runApp(const Music());
 }
@@ -16,7 +18,7 @@ class Music extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(360, 690),
+      designSize: const Size(750, 1134),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
