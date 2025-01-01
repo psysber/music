@@ -7,12 +7,11 @@ import 'package:music/app/modules/index/bindings/index_binding.dart';
 import 'package:music/app/modules/index/views/index_view.dart';
 import 'package:music/app/routes/app_pages.dart';
 
-import 'app/modules/libary/bindings/library_binding.dart';
-
 void main() {
   runApp(const Music());
 }
-class Music extends StatelessWidget{
+
+class Music extends StatelessWidget {
   const Music({super.key});
 
   @override
@@ -32,7 +31,7 @@ class Music extends StatelessWidget{
           theme: ThemeData(
             primaryColor: Colors.deepPurpleAccent,
           ),
-          darkTheme:ThemeData.light(useMaterial3: false),
+          darkTheme: ThemeData.light(useMaterial3: false),
           themeMode: ThemeMode.light,
           initialRoute: AppPages.INITIAL,
           getPages: AppPages.routes,
@@ -47,5 +46,4 @@ class Music extends StatelessWidget{
       },
     );
   }
-
 }
