@@ -14,6 +14,7 @@ abstract class Routes {
   static const DISCOVER = _Paths.DISCOVER;
   static const Library = _Paths.Library;
   static const LOCAL_MUSIC = _Paths.LOCAL_MUSIC;
+  static const CLOUD_MUSIC = _Paths.CLOUD_MUSIC;
 }
 
 abstract class _Paths {
@@ -29,4 +30,5 @@ abstract class _Paths {
   static const DISCOVER = '/discover';
   static const Library = '/Library';
   static const LOCAL_MUSIC = '/local-music';
+  static const CLOUD_MUSIC = '/cloud-music';
 }
