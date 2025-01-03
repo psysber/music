@@ -13,13 +13,13 @@ import '../controllers/index_controller.dart';
 class IndexView extends GetView<IndexController> {
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut(() => IndexController());
+    Get.put(() => IndexController());
     return Obx(() => Scaffold(
-      body: controller.isloadWelcomePage.isTrue
-          ? const SplashView()
-          : Global.isOfflineLogin
-          ? const HomeView()
-          : const LoginPage(),
-    ));
+          body: controller.isloadWelcomePage.isTrue
+              ? const SplashView()
+              : Global.isOfflineLogin
+                  ? const HomeView()
+                  : const LoginPage(),
+        ));
   }
 }

@@ -13,13 +13,14 @@ import 'package:music/app/modules/home/controllers/home_controller.dart';
 import 'package:music/app/modules/home/modules/music_nav.dart';
 import 'package:music/app/modules/libary/views/library_view.dart';
 import 'package:music/app/modules/local_music/views/local_music_view.dart';
+import 'package:music/app/utils/tab_indicator.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const tabs= [
+    const tabs = [
       Tab(
         text: '推荐',
       ),
@@ -31,7 +32,6 @@ class HomeView extends GetView<HomeController> {
       )
     ];
     return DefaultTabController(
-
         initialIndex: 0,
         length: tabs.length,
         child: Scaffold(
@@ -41,28 +41,22 @@ class HomeView extends GetView<HomeController> {
               child: AppBar(
                 title: null,
                 automaticallyImplyLeading: false,
-                bottom:  TabBar(
-                  labelColor: const Color(0xff000000),
-                  labelStyle: TextStyle(fontSize: 32.sp,fontWeight: FontWeight.bold),
-                  unselectedLabelColor: const Color(0xff000000),
-                  unselectedLabelStyle: TextStyle(fontSize: 26.sp),
-                  isScrollable: true,
-                  indicatorColor: const Color(0xff00BF00),
-                  indicatorSize: TabBarIndicatorSize.label,
-                  indicatorWeight: 3.0.w,
-                  tabs:tabs
-                ),
+                bottom: TabBar(
+                    indicator: const TabIndicator(),
+                    labelColor: const Color(0xff000000),
+                    labelStyle:
+                        TextStyle(fontSize: 32.sp, fontWeight: FontWeight.bold),
+                    unselectedLabelColor: const Color(0xff000000),
+                    unselectedLabelStyle: TextStyle(fontSize: 26.sp),
+                    isScrollable: true,
+                    tabs: tabs),
                 centerTitle: true,
                 backgroundColor: const Color(0xffffffff),
                 elevation: 0,
               ),
             ),
             body: const TabBarView(
-                children: [
-              DiscoverView(),
-              LibraryView(),
-              LocalMusicView()
-            ]),
+                children: [DiscoverView(), LibraryView(), LocalMusicView()]),
             bottomNavigationBar: MusicNav()));
   }
 }

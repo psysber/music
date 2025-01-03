@@ -7,28 +7,15 @@ class LocalMusicView extends GetView<LocalMusicController> {
 
   @override
   Widget build(BuildContext context) {
-      final LocalMusicController controller = Get.put(LocalMusicController());
+    final LocalMusicController controller = Get.put(LocalMusicController());
 
-    return Scaffold(
-      body: Obx(() {
-        if (controller.objects.isEmpty) {
-          return const Center(
-            child: Text(
-              'No objects found',
-              style: TextStyle(fontSize: 20),
-            ),
-          );
-        } else {
-          return ListView.builder(
-            itemCount: controller.objects.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(controller.objects[index]),
-              );
-            },
-          );
-        }
-      }),
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          controller.fetchObjects();
+        },
+        child: Text("ssss"),
+      ),
     );
   }
 }
