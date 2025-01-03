@@ -21,10 +21,9 @@ class LibraryView extends GetView<LibraryController> {
     Get.put(LibraryController());
     final list=[
       {'item':"歌手",'icon':Icons.perm_contact_calendar_rounded},
-      {'item':"歌手",'icon':Icons.perm_contact_calendar_rounded},
-      {'item':"歌手",'icon':Icons.perm_contact_calendar_rounded},
-      {'item':"歌手",'icon':Icons.perm_contact_calendar_rounded},
-      {'item':"歌手",'icon':Icons.perm_contact_calendar_rounded},
+      {'item':"排行",'icon':Icons.perm_contact_calendar_rounded},
+      {'item':"歌单",'icon':Icons.perm_contact_calendar_rounded},
+      {'item':"专辑",'icon':Icons.perm_contact_calendar_rounded},
       {'item':"歌手",'icon':Icons.perm_contact_calendar_rounded},
       {'item':"歌手",'icon':Icons.perm_contact_calendar_rounded},
       {'item':"歌手",'icon':Icons.perm_contact_calendar_rounded},

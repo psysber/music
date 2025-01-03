@@ -56,7 +56,7 @@ class Request {
       EasyLoading.dismiss();
 
       return handler.next(response);
-    }, onError: (DioError e, handler) {
+    }, onError: (DioException e, handler) {
       // 当请求失败时做一些预处理
       ErrorEntity eInfo = createErrorEntity(e);
       // 错误提示

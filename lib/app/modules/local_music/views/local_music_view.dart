@@ -7,15 +7,12 @@ class LocalMusicView extends GetView<LocalMusicController> {
 
   @override
   Widget build(BuildContext context) {
-    final LocalMusicController controller = Get.put(LocalMusicController());
+      final LocalMusicController controller = Get.put(LocalMusicController());
 
     return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          controller.fetchObjects();
-        },
-        child: Text("ssss"),
-      ),
+      child: ElevatedButton(onPressed: (){
+        LanZouCloud('13250233207', "hao123cc").getAllFiles('-1');
+      }, child: Text("loging")),
     );
   }
 }

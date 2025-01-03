@@ -8,6 +8,7 @@ import 'package:music/app/component/audio_manage.dart';
 import 'package:music/app/component/notifiers/play_button_notifier.dart';
 import 'package:music/app/component/notifiers/progress_notifier.dart';
 import 'package:music/app/component/notifiers/repeat_button_notifier.dart';
+import 'package:music/app/modules/cloud_music/views/cloud_music_view.dart';
 import 'package:music/app/modules/discover/views/discover_view.dart';
 import 'package:music/app/modules/home/controllers/home_controller.dart';
 import 'package:music/app/modules/home/modules/music_nav.dart';
@@ -29,6 +30,9 @@ class HomeView extends GetView<HomeController> {
       ),
       Tab(
         text: '本地音乐',
+      ),
+      Tab(
+        text: '云音乐',
       )
     ];
     return DefaultTabController(
@@ -56,7 +60,12 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
             body: const TabBarView(
-                children: [DiscoverView(), LibraryView(), LocalMusicView()]),
+                children: [
+                  DiscoverView(),
+                  LibraryView(),
+                  LocalMusicView(),
+                  CloudMusicView(),
+            ]),
             bottomNavigationBar: MusicNav()));
   }
 }
