@@ -60,5 +60,50 @@ public class MeidiaPlayer {
         return songs
     }
 
+    var audioPlayer: AVPlayer?
 
+
+
+    func playMusic(from url: URL) {
+        // 创建 AVPlayerItem
+        let playerItem = AVPlayerItem(url: url)
+
+        // 初始化 AVPlayer
+        audioPlayer = AVPlayer(playerItem: playerItem)
+
+        // 监听播放完成
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(playerDidFinishPlaying),
+            name: .AVPlayerItemDidPlayToEndTime,
+            object: audioPlayer?.currentItem
+        )
+
+        // 监听播放进度
+        let interval = CMTime(seconds: 1, preferredTimescale: 1)
+        audioPlayer?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { time in
+            let currentTime = CMTimeGetSeconds(time)
+            print("Current time: \(currentTime)")
+        }
+
+        // 开始播放
+        audioPlayer?.play()
+    }
+
+    @objc func playerDidFinishPlaying(note: NSNotification) {
+        print("Playback finished")
+    }
+
+    @IBAction func pauseButtonTapped(_ sender: UIButton) {
+        audioPlayer?.pause()
+    }
+
+    @IBAction func stopButtonTapped(_ sender: UIButton) {
+        audioPlayer?.replaceCurrentItem(with: nil)
+    }
+
+    deinit {
+        // 移除监听
+        NotificationCenter.default.removeObserver(self)
+    }
 }

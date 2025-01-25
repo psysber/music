@@ -1,42 +1,42 @@
 class Song {
   final String title;
-  final String artist;
-  final String albumTitle;
-  final String genre;
-  final double playbackDuration;
-  final int albumTrackNumber;
-  final int albumTrackCount;
-  final int discNumber;
-  final int discCount;
-  final bool isExplicitItem;
-  final DateTime releaseDate;
-  final int playCount;
-  final int skipCount;
-  final int rating;
-  final DateTime lastPlayedDate;
-  final String albumArtwork; // 新增字段
-  final double sampleRate; // 新增字段
-  final double bitRate; // 新增字段
+  final String? artist;
+  final String ? albumTitle;
+  final String?  genre;
+  final double ? playbackDuration;
+  final int ? albumTrackNumber;
+  final int ? albumTrackCount;
+  final int ? discNumber;
+  final int ? discCount;
+  final bool ? isExplicitItem;
+  final DateTime?  releaseDate;
+  final int ? playCount;
+  final int ? skipCount;
+  final int ? rating;
+  final DateTime ? lastPlayedDate;
+  final String ? albumArtwork; // 新增字段
+  final double ? sampleRate; // 新增字段
+  final double ? bitRate; // 新增字段
 
   Song({
-    required this.title,
-    required this.artist,
-    required this.albumTitle,
-    required this.genre,
-    required this.playbackDuration,
-    required this.albumTrackNumber,
-    required this.albumTrackCount,
-    required this.discNumber,
-    required this.discCount,
-    required this.isExplicitItem,
-    required this.releaseDate,
-    required this.playCount,
-    required this.skipCount,
-    required this.rating,
-    required this.lastPlayedDate,
-    required this.albumArtwork, // 新增字段
-    required this.sampleRate, // 新增字段
-    required this.bitRate, // 新增字段
+     required this.title,
+     this.artist,
+     this.albumTitle,
+     this.genre,
+     this.playbackDuration,
+     this.albumTrackNumber,
+     this.albumTrackCount,
+     this.discNumber,
+     this.discCount,
+     this.isExplicitItem,
+     this.releaseDate,
+     this.playCount,
+     this.skipCount,
+     this.rating,
+     this.lastPlayedDate,
+     this.albumArtwork, // 新增字段
+     this.sampleRate, // 新增字段
+     this.bitRate, // 新增字段
   });
 
   factory Song.fromJson(Map<String, dynamic> json) {

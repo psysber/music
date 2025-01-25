@@ -11,14 +11,14 @@ class MusicNav extends StatelessWidget{
 
     return  Container(
         height: 160.w,
-        color: Colors.blue,
+        color: Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 50.w),
 
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
 
           children: [
-            //AudioProcessBar(),
+            AudioProcessBar(),
             const SizedBox(
               height: 5,
             ),
