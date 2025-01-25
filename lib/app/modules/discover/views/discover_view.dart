@@ -42,7 +42,7 @@ class DiscoverView extends GetView<DiscoverController> {
                                   child: SizedBox(
                                     width: 160,
                                     height: 160,
-                                    child: Text(c),
+                                    child:  Image.network("https://img.moegirl.org.cn/common/thumb/c/c5/2020ismlhuangyu1.png/89px-2020ismlhuangyu1.png",fit: BoxFit.cover,),
                                   ),
                                 ))
                             .toList(),
@@ -54,7 +54,7 @@ class DiscoverView extends GetView<DiscoverController> {
         ),
         SliverToBoxAdapter(
           child: SizedBox(
-            height: 590.w,
+            height: 500.w,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -72,14 +72,29 @@ class DiscoverView extends GetView<DiscoverController> {
                       children: str
                           .split("")
                           //每一个字母都用一个Text显示,字体为原来的两倍
-                          .map((c) => Card(
-                                color: Colors.blue,
-                                child: SizedBox(
-                                  width: 320,
-                                  height: 260,
-                                  child: Text(c),
+                          .map((c) => SizedBox(
+                            width: 320,
+                            height: 300.h,
+                            child:  Column(
+                              children: [
+                                ListTile(leading: Image.network("https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",fit: BoxFit.cover,),
+                                  title:Text("BAK SONG ss.."),
+                                  subtitle: Text("ly-nsiwls"),
+                                  trailing: Icon(Icons.headphones_rounded,size: 28),
                                 ),
-                              ))
+                                ListTile(leading: Image.network("https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",fit: BoxFit.cover,),
+                                  title:Text("时崎狂三-魔术侦探.   BAK SONG ss..",overflow: TextOverflow.ellipsis,),
+                                  subtitle: Text("ly-nsiwls"),
+                                  trailing: Icon(Icons.headphones_rounded,size: 28),
+                                ),
+                                ListTile(leading: Image.network("https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",fit: BoxFit.cover,),
+                                  title:Text("BAK SONG ss.."),
+                                  subtitle: Text("ly-nsiwls"),
+                                  trailing: Icon(Icons.headphones_rounded,size: 28),
+                                ),
+                              ],
+                            )
+                          ))
                           .toList(),
                     ),
                   ),
@@ -90,7 +105,7 @@ class DiscoverView extends GetView<DiscoverController> {
         ),
         SliverToBoxAdapter(
           child: SizedBox(
-            height: 290,
+            height: 490.h,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -108,11 +123,32 @@ class DiscoverView extends GetView<DiscoverController> {
                           .split("")
                           //每一个字母都用一个Text显示,字体为原来的两倍
                           .map((c) => Card(
-                                color: Colors.blue,
                                 child: SizedBox(
                                   width: 280,
-                                  height: 240,
-                                  child: Text(c),
+                                  height: 390.h,
+                                  child: Column(
+                                    children: [
+                                      ListTile(leading: SizedBox( width: 260.w,height: 50.w, child: Row(children: [
+                                        Text("x榜单",style: TextStyle(fontSize: 34.sp),),SizedBox(width: 20.w,),
+                                        Icon(Icons.play_circle)
+                                      ]),),trailing: Text("11.1.1 更新"),),
+                                      ListTile(leading: Image.network("https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",fit: BoxFit.cover,),
+                                        title:Text("BAK SONG ss.."),
+                                        subtitle: Text("ly-nsiwls"),
+                                        trailing: Icon(Icons.headphones_rounded,size: 28),
+                                      ),
+                                      ListTile(leading: Image.network("https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",fit: BoxFit.cover,),
+                                        title:Text("时崎狂三-魔术侦探.   BAK SONG ss..",overflow: TextOverflow.ellipsis,),
+                                        subtitle: Text("ly-nsiwls"),
+                                        trailing: Icon(Icons.headphones_rounded,size: 28),
+                                      ),
+                                      ListTile(leading: Image.network("https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",fit: BoxFit.cover,),
+                                        title:Text("BAK SONG ss.."),
+                                        subtitle: Text("ly-nsiwls"),
+                                        trailing: Icon(Icons.headphones_rounded,size: 28),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ))
                           .toList(),

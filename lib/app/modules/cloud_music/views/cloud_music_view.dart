@@ -13,7 +13,20 @@ class CloudMusicView extends GetView<CloudMusicController> {
     final controller = Get.put(CloudMusicController());
 
     return CommAppbar(
-      slivers: [],
+      slivers: [  SliverFixedExtentList(
+        itemExtent: 50.0,
+        delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+            //创建列表项
+            return Container(
+              alignment: Alignment.center,
+              color: Colors.lightBlue[100 * (index % 9)],
+              child: Text('list item $index'),
+            );
+          },
+          childCount: 20,
+        ),
+      ),],
     );
   }
 }
