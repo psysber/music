@@ -59,12 +59,11 @@ class HomeView extends GetView<HomeController> {
                 elevation: 0,
               ),
             ),
-            body: const TabBarView(
-                children: [
-                  DiscoverView(),
-                  LibraryView(),
-                  LocalMusicView(),
-                  CloudMusicView(),
+            body: const TabBarView(children: [
+              DiscoverView(),
+              LibraryView(),
+              LocalMusicView(),
+              CloudMusicView(),
             ]),
             bottomNavigationBar: MusicNav()));
   }

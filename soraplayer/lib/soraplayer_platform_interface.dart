@@ -26,7 +26,17 @@ abstract class SoraplayerPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
-  Future<List<dynamic>> getMusicList() async  {
+
+  Future<List<dynamic>> getMusicList() async {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<void> showNotification(
+    String title,
+    String artist,
+    String imagePath,
+    bool isPlaying,
+  ) async {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 }

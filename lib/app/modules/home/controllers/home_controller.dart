@@ -2,19 +2,15 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music/app/component/audio_manage.dart';
-
+import 'package:soraplayer/soraplayer.dart';
 
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
 //数据
 
-
-
-
   @override
   onInit() {
     super.onInit();
-
   }
 
   @override

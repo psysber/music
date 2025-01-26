@@ -2,7 +2,10 @@
 import 'package:flutter/cupertino.dart';
 
 class Img extends StatefulWidget {
-  Img(this.url,{      this.width, this.height, this.defImagePath = "assets/images/loading.png"});
+  Img(this.url,
+      {this.width,
+      this.height,
+      this.defImagePath = "assets/images/loading.png"});
 
   final String url;
   final double? width;
@@ -30,7 +33,7 @@ class _StateImageWidget extends State<Img> {
     var resolve = _image.image.resolve(ImageConfiguration.empty);
     resolve.addListener(ImageStreamListener((_, __) {
       //加载成功
-    },onError: (_,__){
+    }, onError: (_, __) {
       setState(() {
         _image = Image.asset(
           widget.defImagePath,

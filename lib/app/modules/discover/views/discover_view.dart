@@ -12,12 +12,13 @@ class DiscoverView extends GetView<DiscoverController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(DiscoverController());
     const str = "abcdefghizk";
     return CommAppbar(
       slivers: [
         SliverToBoxAdapter(
           child: SizedBox(
-              height: 390.w,
+              height: 240.w,
               width: double.infinity,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -41,8 +42,11 @@ class DiscoverView extends GetView<DiscoverController> {
                                   color: Colors.blue,
                                   child: SizedBox(
                                     width: 160,
-                                    height: 160,
-                                    child:  Image.network("https://img.moegirl.org.cn/common/thumb/c/c5/2020ismlhuangyu1.png/89px-2020ismlhuangyu1.png",fit: BoxFit.cover,),
+                                    height: 160.w,
+                                    child: Image.network(
+                                      "https://img.moegirl.org.cn/common/thumb/c/c5/2020ismlhuangyu1.png/89px-2020ismlhuangyu1.png",
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ))
                             .toList(),
@@ -54,7 +58,7 @@ class DiscoverView extends GetView<DiscoverController> {
         ),
         SliverToBoxAdapter(
           child: SizedBox(
-            height: 500.w,
+            height: 460.w,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -73,28 +77,45 @@ class DiscoverView extends GetView<DiscoverController> {
                           .split("")
                           //每一个字母都用一个Text显示,字体为原来的两倍
                           .map((c) => SizedBox(
-                            width: 320,
-                            height: 300.h,
-                            child:  Column(
-                              children: [
-                                ListTile(leading: Image.network("https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",fit: BoxFit.cover,),
-                                  title:Text("BAK SONG ss.."),
-                                  subtitle: Text("ly-nsiwls"),
-                                  trailing: Icon(Icons.headphones_rounded,size: 28),
-                                ),
-                                ListTile(leading: Image.network("https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",fit: BoxFit.cover,),
-                                  title:Text("时崎狂三-魔术侦探.   BAK SONG ss..",overflow: TextOverflow.ellipsis,),
-                                  subtitle: Text("ly-nsiwls"),
-                                  trailing: Icon(Icons.headphones_rounded,size: 28),
-                                ),
-                                ListTile(leading: Image.network("https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",fit: BoxFit.cover,),
-                                  title:Text("BAK SONG ss.."),
-                                  subtitle: Text("ly-nsiwls"),
-                                  trailing: Icon(Icons.headphones_rounded,size: 28),
-                                ),
-                              ],
-                            )
-                          ))
+                              width: 320,
+                              height: 410.w,
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    leading: Image.network(
+                                      "https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",
+                                      fit: BoxFit.cover,
+                                    ),
+                                    title: Text("BAK SONG ss.."),
+                                    subtitle: Text("ly-nsiwls"),
+                                    trailing: Icon(Icons.headphones_rounded,
+                                        size: 28),
+                                  ),
+                                  ListTile(
+                                    leading: Image.network(
+                                      "https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",
+                                      fit: BoxFit.cover,
+                                    ),
+                                    title: Text(
+                                      "时崎狂三-魔术侦探.   BAK SONG ss..",
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    subtitle: Text("ly-nsiwls"),
+                                    trailing: Icon(Icons.headphones_rounded,
+                                        size: 28),
+                                  ),
+                                  ListTile(
+                                    leading: Image.network(
+                                      "https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",
+                                      fit: BoxFit.cover,
+                                    ),
+                                    title: Text("BAK SONG ss.."),
+                                    subtitle: Text("ly-nsiwls"),
+                                    trailing: Icon(Icons.headphones_rounded,
+                                        size: 28),
+                                  ),
+                                ],
+                              )))
                           .toList(),
                     ),
                   ),
@@ -105,12 +126,13 @@ class DiscoverView extends GetView<DiscoverController> {
         ),
         SliverToBoxAdapter(
           child: SizedBox(
-            height: 490.h,
+            height: 590.w,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                  Text("排行榜",
-                    style: TextStyle(fontSize: 32.sp),
+                Text(
+                  "排行榜",
+                  style: TextStyle(fontSize: 32.sp),
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -125,27 +147,58 @@ class DiscoverView extends GetView<DiscoverController> {
                           .map((c) => Card(
                                 child: SizedBox(
                                   width: 280,
-                                  height: 390.h,
+                                  height: 510.w,
                                   child: Column(
                                     children: [
-                                      ListTile(leading: SizedBox( width: 260.w,height: 50.w, child: Row(children: [
-                                        Text("x榜单",style: TextStyle(fontSize: 34.sp),),SizedBox(width: 20.w,),
-                                        Icon(Icons.play_circle)
-                                      ]),),trailing: Text("11.1.1 更新"),),
-                                      ListTile(leading: Image.network("https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",fit: BoxFit.cover,),
-                                        title:Text("BAK SONG ss.."),
-                                        subtitle: Text("ly-nsiwls"),
-                                        trailing: Icon(Icons.headphones_rounded,size: 28),
+                                      ListTile(
+                                        leading: SizedBox(
+                                          width: 260.w,
+                                          height: 50.w,
+                                          child: Row(children: [
+                                            Text(
+                                              "x榜单",
+                                              style: TextStyle(fontSize: 34.sp),
+                                            ),
+                                            SizedBox(
+                                              width: 20.w,
+                                            ),
+                                            Icon(Icons.play_circle)
+                                          ]),
+                                        ),
+                                        trailing: Text("11.1.1 更新"),
                                       ),
-                                      ListTile(leading: Image.network("https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",fit: BoxFit.cover,),
-                                        title:Text("时崎狂三-魔术侦探.   BAK SONG ss..",overflow: TextOverflow.ellipsis,),
+                                      ListTile(
+                                        leading: Image.network(
+                                          "https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",
+                                          fit: BoxFit.cover,
+                                        ),
+                                        title: Text("BAK SONG ss.."),
                                         subtitle: Text("ly-nsiwls"),
-                                        trailing: Icon(Icons.headphones_rounded,size: 28),
+                                        trailing: Icon(Icons.headphones_rounded,
+                                            size: 28),
                                       ),
-                                      ListTile(leading: Image.network("https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",fit: BoxFit.cover,),
-                                        title:Text("BAK SONG ss.."),
+                                      ListTile(
+                                        leading: Image.network(
+                                          "https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",
+                                          fit: BoxFit.cover,
+                                        ),
+                                        title: Text(
+                                          "时崎狂三-魔术侦探.   BAK SONG ss..",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                         subtitle: Text("ly-nsiwls"),
-                                        trailing: Icon(Icons.headphones_rounded,size: 28),
+                                        trailing: Icon(Icons.headphones_rounded,
+                                            size: 28),
+                                      ),
+                                      ListTile(
+                                        leading: Image.network(
+                                          "https://img.moegirl.org.cn/common/thumb/8/8f/时崎狂三-魔术侦探.jpeg/280px-时崎狂三-魔术侦探.jpeg",
+                                          fit: BoxFit.cover,
+                                        ),
+                                        title: Text("BAK SONG ss.."),
+                                        subtitle: Text("ly-nsiwls"),
+                                        trailing: Icon(Icons.headphones_rounded,
+                                            size: 28),
                                       ),
                                     ],
                                   ),
