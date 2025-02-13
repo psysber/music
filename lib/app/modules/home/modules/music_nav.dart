@@ -18,7 +18,7 @@ class MusicNav extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.center,
 
           children: [
-            AudioProcessBar(),
+           // AudioProcessBar(),
             const SizedBox(
               height: 5,
             ),
@@ -39,9 +39,9 @@ class MusicNav extends StatelessWidget{
                     child: ScrollText(
                       child: "AAAAAAAAAAAAAAAAA",
                     )),
-                PreviousSongButton(),
+              /*  PreviousSongButton(),
                 PlayButton(),
-                NextSongButton()
+                NextSongButton()*/
               ],
             ),
           ],

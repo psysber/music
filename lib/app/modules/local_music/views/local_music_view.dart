@@ -8,7 +8,8 @@ import 'package:music/app/component/scroll_text.dart';
 import 'package:music/app/models/song.dart';
 import 'package:music/app/modules/home/modules/comm_appbar.dart';
 import 'package:music/app/modules/local_music/controllers/local_music_controller.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:music/platform/plugin_platform_interface.dart';
+
 class LocalMusicView extends GetView<LocalMusicController> {
   const LocalMusicView({super.key});
 
@@ -43,7 +44,11 @@ class LocalMusicView extends GetView<LocalMusicController> {
                        child: Row(
                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                            children: [
-                             Icon(Icons.play_circle_outline_rounded),
+                             InkWell(onTap: (){
+
+                             },
+                             child: Icon(Icons.play_circle_outline_rounded),
+                             ),
                              Icon(Icons.add_box_outlined),
                            ],
                      )
