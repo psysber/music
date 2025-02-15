@@ -8,7 +8,6 @@ import 'package:music/app/component/scroll_text.dart';
 import 'package:music/app/models/song.dart';
 import 'package:music/app/modules/home/modules/comm_appbar.dart';
 import 'package:music/app/modules/local_music/controllers/local_music_controller.dart';
-import 'package:path_provider/path_provider.dart';
 class LocalMusicView extends GetView<LocalMusicController> {
   const LocalMusicView({super.key});
 
