@@ -1,5 +1,0 @@
-<resources>
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorControlHighlight">@color/custom_ripple_color</item> <!-- 自定义高亮颜色 -->
-    </style>
-</resources>

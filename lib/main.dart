@@ -7,7 +7,6 @@ import 'package:music/app/modules/index/bindings/index_binding.dart';
 import 'package:music/app/modules/index/views/index_view.dart';
 import 'package:music/app/routes/app_pages.dart';
 
-
 void main() {
   runApp(const Music());
 }
