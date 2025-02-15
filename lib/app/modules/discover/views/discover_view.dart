@@ -58,7 +58,7 @@ class DiscoverView extends GetView<DiscoverController> {
         ),
         SliverToBoxAdapter(
           child: SizedBox(
-            height: 478.w,
+            height: 460.w,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -78,7 +78,7 @@ class DiscoverView extends GetView<DiscoverController> {
                           //每一个字母都用一个Text显示,字体为原来的两倍
                           .map((c) => SizedBox(
                               width: 320,
-                              height: 419.w,
+                              height: 410.w,
                               child: Column(
                                 children: [
                                   ListTile(
@@ -146,8 +146,8 @@ class DiscoverView extends GetView<DiscoverController> {
                           //每一个字母都用一个Text显示,字体为原来的两倍
                           .map((c) => Card(
                                 child: SizedBox(
-                                  width: 680.w,
-                                  height: 520.w,
+                                  width: 280,
+                                  height: 510.w,
                                   child: Column(
                                     children: [
                                       ListTile(
@@ -156,7 +156,7 @@ class DiscoverView extends GetView<DiscoverController> {
                                           height: 50.w,
                                           child: Row(children: [
                                             Text(
-                                              "流行榜单",
+                                              "x榜单",
                                               style: TextStyle(fontSize: 34.sp),
                                             ),
                                             SizedBox(

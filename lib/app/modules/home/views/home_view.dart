@@ -4,7 +4,7 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
+import 'package:music/app/component/audio_manage.dart';
 import 'package:music/app/component/notifiers/play_button_notifier.dart';
 import 'package:music/app/component/notifiers/progress_notifier.dart';
 import 'package:music/app/component/notifiers/repeat_button_notifier.dart';
@@ -69,12 +69,12 @@ class HomeView extends GetView<HomeController> {
   }
 }
 
-/*class AudioProcessBar extends StatelessWidget {
+class AudioProcessBar extends StatelessWidget {
   const AudioProcessBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-  //  final audioManage = AudioManage.instance;
+    final audioManage = AudioManage.instance;
     return ValueListenableBuilder<ProgressBarState>(
       valueListenable: AudioManage.progressNotifier,
       builder: (_, value, __) {
@@ -97,9 +97,8 @@ class HomeView extends GetView<HomeController> {
       },
     );
   }
-}*/
+}
 
-/*
 class PreviousSongButton extends StatelessWidget {
   final audioManage = AudioManage.getInstance();
 
@@ -202,4 +201,3 @@ class RepeatButton extends StatelessWidget {
     );
   }
 }
-*/
