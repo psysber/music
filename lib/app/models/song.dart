@@ -16,9 +16,12 @@ class Song {
   final DateTime ? lastPlayedDate;
   final String ? albumArtwork; // 新增字段
   final double ? sampleRate; // 新增字段
-  final double ? bitRate; // 新增字段
+  final double ? bitRate;
+
+  final url; // 新增字段
 
   Song({
+     this.url,
      required this.title,
      this.artist,
      this.albumTitle,
@@ -58,7 +61,10 @@ class Song {
       lastPlayedDate: DateTime.parse(json['lastPlayedDate']),
       albumArtwork: json['albumArtwork'],
       sampleRate: json['sampleRate'], 
-      bitRate: json['bitRate'], 
+      bitRate: json['bitRate'],
+      url: json['url']
     );
   }
+
+
 }

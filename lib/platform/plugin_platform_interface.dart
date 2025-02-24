@@ -1,6 +1,8 @@
 // calendar_plugin.dart
 
 
+import 'package:music/app/component/notifiers/progress_notifier.dart';
+import 'package:music/app/models/song.dart';
 import 'package:music/platform/plugin.dart';
 
 class  Plugin {
@@ -21,8 +23,10 @@ class  Plugin {
   /// 获取跳转完成通知流
   static Stream<void> get seekCompleteStream => _platform.seekCompleteStream;
 
+  static Stream<ProgressBarState> get processStream => _platform.processStream;
+
   /// 开始播放
-  static Future<void> play(String url) => _platform.play(url);
+  static Future<void> play(Song url) => _platform.play(url);
 
   /// 暂停播放
   static Future<void> pause() => _platform.pause();

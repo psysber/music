@@ -1,4 +1,7 @@
 // calendar_plugin_platform_interface.dart
+import 'package:music/app/component/notifiers/play_button_notifier.dart';
+import 'package:music/app/component/notifiers/progress_notifier.dart';
+import 'package:music/app/models/song.dart';
 import 'package:music/platform/plugin_method_channel.dart.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +20,7 @@ abstract class PluginPlatform extends PlatformInterface {
   }
 
   // 方法通道方法
-  Future<void> play(String url) async {}
+  Future<void> play(Song url) async {}
   Future<void> pause() async {}
   Future<void> resume() async {}
   Future<void> seek(int position) async {}
@@ -28,4 +31,6 @@ abstract class PluginPlatform extends PlatformInterface {
   Stream<void> get completeStream => const Stream.empty();
   Stream<String> get errorStream => const Stream.empty();
   Stream<void> get seekCompleteStream => const Stream.empty();
+  Stream<ProgressBarState>  get processStream => const Stream.empty();
+     Stream<ButtonState>  get buttonStream => const Stream.empty();
 }

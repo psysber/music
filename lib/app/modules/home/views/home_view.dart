@@ -8,11 +8,16 @@ import 'package:get/get.dart';
 import 'package:music/app/component/notifiers/play_button_notifier.dart';
 import 'package:music/app/component/notifiers/progress_notifier.dart';
 import 'package:music/app/component/notifiers/repeat_button_notifier.dart';
+import 'package:music/app/modules/cloud_music/controllers/cloud_music_controller.dart';
 import 'package:music/app/modules/cloud_music/views/cloud_music_view.dart';
+import 'package:music/app/modules/discover/bindings/discover_binding.dart';
+import 'package:music/app/modules/discover/controllers/discover_controller.dart';
 import 'package:music/app/modules/discover/views/discover_view.dart';
 import 'package:music/app/modules/home/controllers/home_controller.dart';
 import 'package:music/app/modules/home/modules/music_nav.dart';
+import 'package:music/app/modules/libary/controllers/library_controller.dart';
 import 'package:music/app/modules/libary/views/library_view.dart';
+import 'package:music/app/modules/local_music/controllers/local_music_controller.dart';
 import 'package:music/app/modules/local_music/views/local_music_view.dart';
 import 'package:music/app/utils/tab_indicator.dart';
 
@@ -46,6 +51,7 @@ class HomeView extends GetView<HomeController> {
                 title: null,
                 automaticallyImplyLeading: false,
                 bottom: TabBar(
+
                     indicator: const TabIndicator(),
                     labelColor: const Color(0xff000000),
                     labelStyle:
@@ -59,11 +65,23 @@ class HomeView extends GetView<HomeController> {
                 elevation: 0,
               ),
             ),
-            body: const TabBarView(children: [
-              DiscoverView(),
-              LibraryView(),
-              LocalMusicView(),
-              CloudMusicView(),
+            body: TabBarView(children: [
+              GetBuilder<DiscoverController>(
+                init: DiscoverController(),
+                builder: (controller) => const DiscoverView(),
+              ),
+              GetBuilder<LibraryController>(
+                init: LibraryController(),
+                builder: (controller) => const LibraryView(),
+              ),
+              GetBuilder<LocalMusicController>(
+                init: LocalMusicController(),
+                builder: (controller) => const LocalMusicView( ),
+              ),
+              GetBuilder<CloudMusicController>(
+                init: CloudMusicController(),
+                builder: (controller) => const CloudMusicView(),
+              ),
             ]),
             bottomNavigationBar: MusicNav()));
   }

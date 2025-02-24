@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:music/app/modules/discover/bindings/discover_binding.dart';
+import 'package:music/app/modules/discover/views/discover_view.dart';
 
 import '../modules/cloud_music/bindings/cloud_music_binding.dart';
 import '../modules/cloud_music/views/cloud_music_view.dart';
@@ -30,9 +32,9 @@ class AppPages {
       binding: IndexBinding(),
     ),
     GetPage(
-      name: _Paths.CLOUD_MUSIC,
-      page: () => const CloudMusicView(),
-      binding: CloudMusicBinding(),
+      name: _Paths.DISCOVER,
+      page: () => const DiscoverView(),
+      binding: DiscoverBinding(),
     ),
   ];
 }
