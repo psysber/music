@@ -32,18 +32,10 @@ class LocalMusicController extends GetxController {
         albumArtwork: "https://jrocknews.com/wp-content/uploads/2017/11/egoist-greatest-hits-2011-2017-alter-ego-artwork-regular-edition.jpg",
         url: "https://music.163.com/song/media/outer/url?id=31649312"
     );
-    AudioManage().play(song);
+    AudioManage().play();
 
-    Plugin.durationStream.listen((duration) {
-      print('总时长: $duration 毫秒');
-    });
 
-    Plugin.completeStream.listen((_) {
-      print('播放完成');
-    });
-    Plugin.positionStream.listen((position) {
-      print('当前播放位置: $position 毫秒');
-    });
+
   }
 
 }

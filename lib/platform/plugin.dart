@@ -26,11 +26,11 @@ abstract class PluginPlatform extends PlatformInterface {
   Future<void> seek(int position) async {}
 
   // 事件流
-  Stream<int> get positionStream => const Stream.empty();
+/*  Stream<int> get positionStream => const Stream.empty();
   Stream<int> get durationStream => const Stream.empty();
   Stream<void> get completeStream => const Stream.empty();
-  Stream<String> get errorStream => const Stream.empty();
+  Stream<String> get errorStream => const Stream.empty();*/
   Stream<void> get seekCompleteStream => const Stream.empty();
   Stream<ProgressBarState>  get processStream => const Stream.empty();
-     Stream<ButtonState>  get buttonStream => const Stream.empty();
+  Stream<ButtonState>  get buttonStream => const Stream.empty();
 }

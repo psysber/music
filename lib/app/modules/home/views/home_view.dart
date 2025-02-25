@@ -4,6 +4,9 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:music/app/component/audio_manage.dart';
+import 'package:music/app/component/audio_manage.dart';
+import 'package:music/app/component/audio_manage.dart';
 
 import 'package:music/app/component/notifiers/play_button_notifier.dart';
 import 'package:music/app/component/notifiers/progress_notifier.dart';
@@ -87,14 +90,14 @@ class HomeView extends GetView<HomeController> {
   }
 }
 
-/*class AudioProcessBar extends StatelessWidget {
+class AudioProcessBar extends StatelessWidget {
   const AudioProcessBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-  //  final audioManage = AudioManage.instance;
+    final audioManage = AudioManage();
     return ValueListenableBuilder<ProgressBarState>(
-      valueListenable: AudioManage.progressNotifier,
+      valueListenable: audioManage.progressNotifier,
       builder: (_, value, __) {
         return ProgressBar(
           barHeight: 3.0,
@@ -115,7 +118,8 @@ class HomeView extends GetView<HomeController> {
       },
     );
   }
-}*/
+}
+
 
 /*
 class PreviousSongButton extends StatelessWidget {
@@ -153,14 +157,15 @@ class NextSongButton extends StatelessWidget {
     );
   }
 }
+*/
 
 class PlayButton extends StatelessWidget {
-  final audioManage = AudioManage.instance;
+  final audioManage = AudioManage();
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ButtonState>(
-      valueListenable: AudioManage.playButtonNotifier,
+      valueListenable: audioManage.playButtonNotifier,
       builder: (BuildContext context, value, Widget? child) {
         switch (value) {
           case ButtonState.loading:
@@ -173,17 +178,17 @@ class PlayButton extends StatelessWidget {
           case ButtonState.paused:
             return IconButton(
               icon: const Icon(Icons.play_arrow),
-              onPressed: AudioManage.instance.play,
+              onPressed: ()=>AudioManage().play(),
             );
           case ButtonState.playing:
             return IconButton(
               icon: const Icon(Icons.pause),
-              onPressed: AudioManage.instance.pause,
+              onPressed:()=>AudioManage().pause(),
             );
           default:
             return IconButton(
               icon: const Icon(Icons.play_arrow),
-              onPressed: AudioManage.instance.play,
+              onPressed: ()=>AudioManage().play(),
             );
         }
       },
@@ -191,6 +196,7 @@ class PlayButton extends StatelessWidget {
   }
 }
 
+/*
 class RepeatButton extends StatelessWidget {
   RepeatButton({Key? key}) : super(key: key);
   final audioManage = AudioManage.instance;
@@ -221,3 +227,4 @@ class RepeatButton extends StatelessWidget {
   }
 }
 */
+

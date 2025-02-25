@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:flutter/cupertino.dart';
 import 'package:music/app/component/notifiers/play_button_notifier.dart';
 import 'package:music/app/models/song.dart';
 import 'package:music/platform/plugin_platform_interface.dart';
@@ -7,20 +10,34 @@ import 'notifiers/progress_notifier.dart';
 class AudioManage {
   // 单例模式
   static final AudioManage _instance = AudioManage._internal();
-  factory AudioManage() => _instance;
-  AudioManage._internal();
 
-  // 初始化
-  AudioManage.init() {
-    _processStream.listen((onData) {
-      progressNotifier.value = onData;
-    });
+  AudioManage._internal(){
+    init();
   }
+
+  // 工厂构造函数，用来返回唯一实例
+  factory AudioManage() {
+
+    return _instance;
+  }
+
+
+ void init(){
+    _processStream.listen((onData){
+      progressNotifier.value=onData;
+    });
+   _buttonStream.listen((value){
+     playButtonNotifier.value=value;
+   });
+  }
+
 
   // 进度通知器
   final progressNotifier = ProgressNotifier();
   final playButtonNotifier = PlayButtonNotifier();
-  // 获取播放位置流
+
+
+ /* // 获取播放位置流
   Stream<int> get positionStream => Plugin.positionStream;
 
   // 获取总时长流
@@ -30,7 +47,8 @@ class AudioManage {
   Stream<void> get completeStream => Plugin.completeStream;
 
   // 获取错误信息流
-  Stream<String> get errorStream => Plugin.errorStream;
+  Stream<String> get errorStream => Plugin.errorStream;*/
+
 
   // 获取跳转完成通知流
   Stream<void> get seekCompleteStream => Plugin.seekCompleteStream;
@@ -38,9 +56,19 @@ class AudioManage {
   // 私有流，用于处理进度更新
   Stream<ProgressBarState> get _processStream => Plugin.processStream;
 
+  Stream<ButtonState> get _buttonStream => Plugin.buttonStream;
   // 开始播放
-  Future<void> play(Song song) async {
+   void play() async {
     try {
+
+      var song = Song(
+          title: "エゴイスト",
+          artist: "EGOIST",
+          albumTitle: "エゴイスト",
+          albumArtwork: "https://jrocknews.com/wp-content/uploads/2017/11/egoist-greatest-hits-2011-2017-alter-ego-artwork-regular-edition.jpg",
+          url: "https://music.163.com/song/media/outer/url?id=31649312"
+      );
+      print("play");
       await Plugin.play(song);
     } catch (e) {
       print('播放失败: $e');
@@ -66,17 +94,21 @@ class AudioManage {
   }
 
   // 跳转到指定位置（毫秒）
-  Future<void> seek(int position) async {
+  Future<Duration> seek (Duration position) async {
     try {
-      await Plugin.seek(position);
+      print("po"+position.toString());
+      await Plugin.seek(position.inMilliseconds);
+
     } catch (e) {
       print('跳转失败: $e');
     }
+    return Duration(seconds: 2);
   }
 
   // 释放资源
   void dispose() {
     // 释放流和其他资源
     progressNotifier.dispose();
+
   }
 }
