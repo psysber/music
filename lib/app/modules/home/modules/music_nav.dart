@@ -6,17 +6,20 @@ import 'package:music/app/component/audio_manage.dart';
 import 'package:music/app/component/scroll_text.dart';
 import 'package:music/app/modules/home/views/home_view.dart';
 
-class MusicNav extends StatelessWidget {
+class MusicNav extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    return Container(
+
+    return  Container(
         height: 160.w,
         color: Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 50.w),
+
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+
           children: [
-            const AudioProcessBar(),
+           const AudioProcessBar(),
             const SizedBox(
               height: 5,
             ),
@@ -35,10 +38,10 @@ class MusicNav extends StatelessWidget {
                 ),
                 Expanded(
                     child: ScrollText(
-                  child: "AAAAAAAAAAAAAAAAA",
-                )),
+                      child: "AAAAAAAAAAAAAAAAA",
+                    )),
                 PlayButton()
-                /*  PreviousSongButton(),
+              /*  PreviousSongButton(),
 
                 NextSongButton()*/
               ],
@@ -46,4 +49,5 @@ class MusicNav extends StatelessWidget {
           ],
         ));
   }
+
 }

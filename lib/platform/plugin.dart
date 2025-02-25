@@ -32,5 +32,5 @@ abstract class PluginPlatform extends PlatformInterface {
   Stream<String> get errorStream => const Stream.empty();*/
   Stream<void> get seekCompleteStream => const Stream.empty();
   Stream<ProgressBarState>  get processStream => const Stream.empty();
-  Stream<ButtonState>  get buttonStream => const Stream.empty();
+     Stream<ButtonState>  get buttonStream => const Stream.empty();
 }

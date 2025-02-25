@@ -1,7 +1,6 @@
 // calendar_plugin.dart
 
 
-import 'package:flutter/material.dart';
 import 'package:music/app/component/notifiers/play_button_notifier.dart';
 import 'package:music/app/component/notifiers/progress_notifier.dart';
 import 'package:music/app/models/song.dart';
@@ -26,9 +25,8 @@ class  Plugin {
   static Stream<void> get seekCompleteStream => _platform.seekCompleteStream;
 
   static Stream<ProgressBarState> get processStream => _platform.processStream;
-
   static Stream<ButtonState> get buttonStream => _platform.buttonStream;
-
+  /// 开始播放
   static Future<void> play(Song url) => _platform.play(url);
 
   /// 暂停播放

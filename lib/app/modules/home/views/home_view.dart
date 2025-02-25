@@ -178,17 +178,17 @@ class PlayButton extends StatelessWidget {
           case ButtonState.paused:
             return IconButton(
               icon: const Icon(Icons.play_arrow),
-              onPressed: ()=>AudioManage().play(),
+              onPressed: ()=>audioManage.play(),
             );
           case ButtonState.playing:
             return IconButton(
               icon: const Icon(Icons.pause),
-              onPressed:()=>AudioManage().pause(),
+              onPressed:()=>audioManage.pause(),
             );
           default:
             return IconButton(
               icon: const Icon(Icons.play_arrow),
-              onPressed: ()=>AudioManage().play(),
+              onPressed: ()=>audioManage.play(),
             );
         }
       },

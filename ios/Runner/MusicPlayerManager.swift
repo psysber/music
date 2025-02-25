@@ -257,9 +257,9 @@ class MusicPlayerManager: NSObject {
             }
         }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
+       NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
         player?.addObserver(self, forKeyPath: "rate", options: [.new, .initial], context: nil)
-        player?.currentItem?.addObserver(self, forKeyPath: "status", options: [.new, .initial], context: nil)
+       player?.currentItem?.addObserver(self, forKeyPath: "status", options: [.new, .initial], context: nil)
     }
     
     private func cleanupObservers() {

@@ -43,23 +43,6 @@ class MethodChannelPlugin extends PluginPlatform {
     _methodChannel.setMethodCallHandler(_handleMethodCall);
   }
 
-  ButtonState _convertToPlayerState(String stateString) {
-    switch (stateString) {
-      case 'stopped':
-        return ButtonState.stopped;
-      case 'playing':
-        return ButtonState.playing;
-      case 'paused':
-        return ButtonState.paused;
-      case 'completed':
-        return ButtonState.completed;
-      case 'loading':
-        return ButtonState.loading;
-      default:
-        throw ArgumentError('Unknown player state: $stateString');
-    }
-  }
-
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
     switch (call.method) {
@@ -77,75 +60,81 @@ class MethodChannelPlugin extends PluginPlatform {
         break;*/
       case _methodPlayerStateChanged:
         final String stateString = call.arguments as String;
-        final ButtonState playerState = _convertToPlayerState(stateString);
+        playhandleMethodCall(stateString);
+      case _eventSeekComplete:
+        _seekCompleteController.add(call.arguments as int);
+        break;
+      case _eventBufferingUpdate:
+        var args = call.arguments;
+        var progressBarState = ProgressBarState(
+          current: Duration(seconds: args['current'].toInt()),
+          buffered: Duration(seconds: args['buffered'].toInt()),
+          total: Duration(seconds: args['total'].toInt()),
+        );
 
-        switch (playerState) {
-          case ButtonState.stopped:
-            print('Player is stopped');
-            _buttonStream.add(ButtonState.stopped);
-            break;
-          case ButtonState.playing:
-            print('Player is playing');
-            _buttonStream.add(ButtonState.playing);
-            break;
-          case ButtonState.paused:
-            print('Player is paused');
-            _buttonStream.add(ButtonState.paused);
-            break;
-          case ButtonState.completed:
-            print('Player has completed playback');
-            _buttonStream.add(ButtonState.stopped);
-            break;
-          case ButtonState.loading:
-            print('Player is loading');
-
-          case _eventSeekComplete:
-            _seekCompleteController.add(call.arguments as int);
-            break;
-          case _eventBufferingUpdate:
-            var args = call.arguments;
-            var progressBarState = ProgressBarState(
-              current: Duration(seconds: args['current'].toInt()),
-              buffered: Duration(seconds: args['buffered'].toInt()),
-              total: Duration(seconds: args['total'].toInt()),
-            );
-            _processStream.add(progressBarState);
-            break;
-        /*  case _eventPlayState:
+        _processStream.add(progressBarState);
+        break;
+    /*  case _eventPlayState:
         _handlePlayState(call.arguments as Map<String, dynamic>);
         break;*/
-          default:
-            throw MissingPluginException();
-        }
-        return null;
+      default:
+        throw MissingPluginException();
     }
+    return null;
+  }
 
 
-    void _handlePlayState(Map<String, dynamic> args) {
-      final state = args.keys.firstWhere((key) => args[key] == true,
-          orElse: () => '');
-      switch (state) {
-        case 'play':
-          _buttonStream.add(ButtonState.playing);
-          break;
-        case 'pause':
-          _buttonStream.add(ButtonState.paused);
-          break;
-        case 'complete':
-          _buttonStream.add(ButtonState.completed);
-          break;
-        case 'loading':
-          _buttonStream.add(ButtonState.loading);
-          break;
-        case 'stop':
-          _buttonStream.add(ButtonState.stopped);
-          break;
-        default:
-          print('Unknown play state: $state');
-          break;
-      }
+  ButtonState _convertToPlayerState(String stateString) {
+    switch (stateString) {
+      case 'stopped':
+        return ButtonState.stopped;
+      case 'playing':
+        return ButtonState.playing;
+      case 'paused':
+        return ButtonState.paused;
+      case 'completed':
+        return ButtonState.completed;
+      case 'loading':
+        return ButtonState.loading;
+      default:
+        throw ArgumentError('Unknown player state: $stateString');
     }
   }
+  void playhandleMethodCall(String state) {
+
+      final ButtonState playerState = _convertToPlayerState(state);
+
+      switch (playerState) {
+        case ButtonState.stopped:
+          print('Player is stopped');
+          _buttonStream.add(ButtonState.stopped); // 可能需要调整为正确的ButtonState
+          break;
+        case ButtonState.playing:
+          print('Player is playing');
+          _buttonStream.add(ButtonState.playing); // 当播放时，按钮应显示为暂停
+          break;
+        case ButtonState.paused:
+          print('Player is paused');
+          _buttonStream.add(ButtonState.paused); // 当暂停时，按钮应显示为播放
+          break;
+        case ButtonState.completed:
+          print('Player has completed playback');
+          _buttonStream.add(ButtonState.stopped); // 播放结束时，按钮应显示为停止
+          break;
+        case ButtonState.loading:
+          //_buttonStream.add(ButtonState.loading);
+          break;
+        default:
+          throw ArgumentError('Unknown player state: $state');
+      }
+    }
+
+
+
+
+
+
+
 /*  @override
   Stream<int> get positionStream => _positionController.stream;
 
@@ -158,49 +147,48 @@ class MethodChannelPlugin extends PluginPlatform {
   @override
   Stream<String> get errorStream => _errorController.stream;*/
 
-    @override
-    Stream<void> get seekCompleteStream =>
+@override
+Stream<void> get seekCompleteStream =>
     _seekCompleteController.stream;
 
-    @override
-    Stream<ProgressBarState> get processStream =>
+@override
+Stream<ProgressBarState> get processStream =>
     _processStream.stream;
 
-    @override
-    Stream<ButtonState> get buttonStream =>
+@override
+Stream<ButtonState> get buttonStream =>
     _buttonStream.stream;
 
-    @override
-    Future<void> play(Song song) async {
-      await _invokeMethod(_methodPlay, {
-        'url': song.url,
-        'title': song.title,
-        'artist': song.artist,
-        'album': song.albumTitle,
-        'artwork': song.albumArtwork,
-      });
-    }
+@override
+Future<void> play(Song song) async {
+  await _invokeMethod(_methodPlay, {
+    'url': song.url,
+    'title': song.title,
+    'artist': song.artist,
+    'album': song.albumTitle,
+    'artwork': song.albumArtwork,
+  });
+}
 
-    @override
-    Future<void> pause() async {
-      await _invokeMethod(_methodPause);
-    }
+@override
+Future<void> pause() async {
+  await _invokeMethod(_methodPause);
+}
 
-    @override
-    Future<void> resume() async {
-      await _invokeMethod(_methodResume);
-    }
+@override
+Future<void> resume() async {
+  await _invokeMethod(_methodResume);
+}
 
-    @override
-    Future<void> seek(int position) async {
-      await _invokeMethod(_methodSeek, {'position': position});
-    }
+@override
+Future<void> seek(int position) async {
+  await _invokeMethod(_methodSeek, {'position': position});
+}
 
-    Future<void> _invokeMethod(String method, [dynamic arguments]) async {
-      try {
-        await _methodChannel.invokeMethod(method, arguments);
-      } on PlatformException catch (e) {
-        throw Exception("$method failed: ${e.message}");
-      }
-    }
+Future<void> _invokeMethod(String method, [dynamic arguments]) async {
+  try {
+    await _methodChannel.invokeMethod(method, arguments);
+  } on PlatformException catch (e) {
+    throw Exception("$method failed: ${e.message}");
   }
+}}

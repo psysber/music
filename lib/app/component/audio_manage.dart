@@ -26,11 +26,11 @@ class AudioManage {
     _processStream.listen((onData){
       progressNotifier.value=onData;
     });
-   _buttonStream.listen((value){
-     playButtonNotifier.value=value;
-   });
+    _buttonStream.listen((onData){
+      playButtonNotifier.value=onData;
+      print("Button:$onData");
+    });
   }
-
 
   // 进度通知器
   final progressNotifier = ProgressNotifier();
@@ -55,7 +55,6 @@ class AudioManage {
 
   // 私有流，用于处理进度更新
   Stream<ProgressBarState> get _processStream => Plugin.processStream;
-
   Stream<ButtonState> get _buttonStream => Plugin.buttonStream;
   // 开始播放
    void play() async {
