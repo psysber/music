@@ -73,6 +73,12 @@ class MusicPlayerManager: NSObject {
                     self?.channel.invokeMethod("onSeekCompleted", arguments: positionSeconds)
                 }
             }
+        case "fetchLocalSongs":
+            
+            fetchLocalSongs { songs in
+                // 在这里使用歌曲数据
+                self.channel.invokeMethod("fetchLocalSongs", arguments: songs)
+            }
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -186,12 +192,57 @@ class MusicPlayerManager: NSObject {
     }
     
     private func loadArtwork(from urlString: String, artist: String, title: String, album: String) {
-        guard let artworkUrl = URL(string: urlString) else { return }
-        URLSession.shared.dataTask(with: artworkUrl) { [weak self] data, _, error in
-            guard let self = self, let data = data, error == nil else { return }
-            let image = UIImage(data: data)
-            self.updateNowPlayingInfo(with: image, artist: artist, title: title, album: album)
+        // 检查是否是 HTTP/HTTPS URL
+        if urlString.lowercased().hasPrefix("http://") || urlString.lowercased().hasPrefix("https://") {
+            // 处理普通 URL
+            loadArtworkFromURL(urlString, artist: artist, title: title, album: album)
+        } else {
+            // 假设是 Base64 图像数据
+            loadArtworkFromBase64(urlString, artist: artist, title: title, album: album)
+        }
+    }
+
+    private func loadArtworkFromURL(_ urlString: String, artist: String, title: String, album: String) {
+        // 清理 URL 字符串（去除空格和非法字符）
+        let cleanedUrlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        
+        // 检查 URL 是否有效
+        guard let artworkUrl = URL(string: cleanedUrlString), !cleanedUrlString.isEmpty else {
+            print("无效的 URL: \(urlString)")
+            return
+        }
+
+        // 使用 URLSession 加载图片数据
+        URLSession.shared.dataTask(with: artworkUrl) { [weak self] data, response, error in
+            // 检查 self 是否存在，数据是否有效，以及是否有错误
+            guard let self = self, let data = data, error == nil else {
+                print("加载图片失败: \(error?.localizedDescription ?? "未知错误")")
+                return
+            }
+
+            // 将数据转换为 UIImage
+            if let image = UIImage(data: data) {
+                // 更新正在播放的信息
+                self.updateNowPlayingInfo(with: image, artist: artist, title: title, album: album)
+            } else {
+                print("无法将数据转换为图片")
+            }
         }.resume()
+    }
+
+    private func loadArtworkFromBase64(_ base64String: String, artist: String, title: String, album: String) {
+        // 将 Base64 字符串解码为 Data
+        if let imageData = Data(base64Encoded: base64String) {
+            // 将 Data 转换为 UIImage
+            if let image = UIImage(data: imageData) {
+                // 更新正在播放的信息
+                self.updateNowPlayingInfo(with: image, artist: artist, title: title, album: album)
+            } else {
+                print("Base64 数据无法转换为图片")
+            }
+        } else {
+            print("Base64 数据无效")
+        }
     }
     
     private func updateNowPlayingInfo(with image: UIImage? = nil, artist: String, title: String, album: String) {
@@ -277,4 +328,68 @@ class MusicPlayerManager: NSObject {
         guard let timeRange = item.loadedTimeRanges.first?.timeRangeValue else { return 0 }
         return CMTimeGetSeconds(CMTimeAdd(timeRange.start, timeRange.duration))
     }
+    
+    
+    
+    
+    func fetchLocalSongs(completion: @escaping ([[String: Any]]) -> Void) {
+        var songs: [[String: Any]] = []
+        
+        // 请求媒体库权限
+        MPMediaLibrary.requestAuthorization { status in
+            if status == .authorized {
+                // 创建查询对象
+                let query = MPMediaQuery.songs()
+                
+                // 设置过滤条件（可选）：排除 iCloud 中的歌曲
+                let filter = MPMediaPropertyPredicate(value: false, forProperty: MPMediaItemPropertyIsCloudItem, comparisonType: .equalTo)
+                query.addFilterPredicate(filter)
+                
+                // 获取本地歌曲
+                if let items = query.items {
+                    for item in items {
+                        var songInfo: [String: Any] = [:]
+                        
+                        // 提取歌曲元数据
+                        songInfo["url"] = item.assetURL?.absoluteString ?? ""
+                        songInfo["title"] = item.title ?? "未知标题"
+                        songInfo["artist"] = item.artist ?? "未知艺术家"
+                        songInfo["albumTitle"] = item.albumTitle ?? "未知专辑"
+                        songInfo["genre"] = item.genre ?? "未知流派"
+                        songInfo["playbackDuration"] = item.playbackDuration
+                        songInfo["albumTrackNumber"] = item.albumTrackNumber
+                        songInfo["albumTrackCount"] = item.albumTrackCount
+                        songInfo["discNumber"] = item.discNumber
+                        songInfo["discCount"] = item.discCount
+                        songInfo["isExplicitItem"] = item.isExplicitItem
+                        songInfo["releaseDate"] = item.releaseDate
+                        songInfo["playCount"] = item.playCount
+                        songInfo["skipCount"] = item.skipCount
+                        songInfo["rating"] = item.rating
+                        songInfo["lastPlayedDate"] = item.lastPlayedDate
+                        
+                        // 专辑封面
+                        if let artwork = item.artwork {
+                            songInfo["albumArtwork"] = artwork.image(at: CGSize(width: 300, height: 300))?.pngData()?.base64EncodedString() ?? ""
+                        } else {
+                            songInfo["albumArtwork"] = ""
+                        }
+                        
+                        // 音频质量信息
+                        songInfo["sampleRate"] = item.value(forProperty: "sampleRate") as? Double ?? 0.0
+                        songInfo["bitRate"] = item.value(forProperty: "bitRate") as? Double ?? 0.0
+                        
+                        songs.append(songInfo)
+                    }
+                }
+                // 返回歌曲数据
+                completion(songs)
+            } else {
+                print("未授权访问媒体库")
+                completion([]) // 返回空数组
+            }
+        }
+    }
+    
+    
 }

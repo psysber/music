@@ -1,20 +1,21 @@
 import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:music/app/component/notifiers/play_button_notifier.dart';
 import 'package:music/app/models/song.dart';
 import 'package:music/platform/plugin_platform_interface.dart';
 
 import 'notifiers/progress_notifier.dart';
 
-class AudioManage {
+class AudioManage extends GetxController{
   // 单例模式
   static final AudioManage _instance = AudioManage._internal();
 
   AudioManage._internal(){
     init();
   }
-
+  List<Song> list = [];
   // 工厂构造函数，用来返回唯一实例
   factory AudioManage() {
 
@@ -56,19 +57,22 @@ class AudioManage {
   // 私有流，用于处理进度更新
   Stream<ProgressBarState> get _processStream => Plugin.processStream;
   Stream<ButtonState> get _buttonStream => Plugin.buttonStream;
-  // 开始播放
-   void play() async {
-    try {
 
-      var song = Song(
-          title: "エゴイスト",
-          artist: "EGOIST",
-          albumTitle: "エゴイスト",
-          albumArtwork: "https://jrocknews.com/wp-content/uploads/2017/11/egoist-greatest-hits-2011-2017-alter-ego-artwork-regular-edition.jpg",
-          url: "https://music.163.com/song/media/outer/url?id=31649312"
-      );
-      print("play");
-      await Plugin.play(song);
+
+  void play([Song? song]) async {
+
+    if (song == null) {
+      return;
+    }
+
+    try {
+      await Plugin.play(Song(
+        title: song.title,
+        artist: song.artist,
+        albumTitle: song.albumTitle,
+        albumArtwork: song.albumArtwork,
+        url: song.url,
+      ));
     } catch (e) {
       print('播放失败: $e');
     }

@@ -37,4 +37,6 @@ class  Plugin {
 
   /// 跳转到指定位置（毫秒）
   static Future<void> seek(int position) => _platform.seek(position);
+
+  static Future<void> fetchLocalSongs()=> _platform.fetchLocalSongs();
 }
