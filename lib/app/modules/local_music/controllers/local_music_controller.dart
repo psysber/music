@@ -1,3 +1,9 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+
+import 'package:audio_metadata_extractor/audio_metadata_extractor.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:music/app/component/audio_manage.dart';
@@ -8,8 +14,16 @@ class LocalMusicController extends GetxController {
   var localSong = <Song>[].obs;
 
   @override
-  void onReady() {
-    Plugin.fetchLocalSongs();
+  Future<void> onReady() async {
+    localSong.clear();
+    await Plugin.fetchLocalSongs();
+
   }
+  @override
+  Future<void> onClose() async {
+    AudioManage().clearPlayList();
+    await Plugin.fetchLocalSongs();
+  }
+
 
 }

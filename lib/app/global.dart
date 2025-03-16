@@ -23,6 +23,8 @@ class Global {
   /// 是否 release
   static bool get isRelease => bool.fromEnvironment("dart.vm.product");
 
+
+
   /// init
   static Future init() async {
     // 运行初始

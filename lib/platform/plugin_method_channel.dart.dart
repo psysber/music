@@ -1,8 +1,10 @@
 // calendar_plugin_method_channel.dart
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:music/app/component/audio_manage.dart';
 import 'package:music/app/component/notifiers/play_button_notifier.dart';
 import 'package:music/app/component/notifiers/progress_notifier.dart';
 import 'package:music/app/models/song.dart';
@@ -16,25 +18,28 @@ class MethodChannelPlugin extends PluginPlatform {
   static const String _methodResume = 'resume';
   static const String _methodSeek = 'seek';
   static const String _methodPlayerStateChanged = 'onPlayerStateChanged';
-
-/*
   static const String _eventPosition = 'onPosition';
   static const String _eventDuration = 'onDuration';
   static const String _eventComplete = 'onComplete';
-  static const String _eventError = 'onError';*/
+  static const String _eventError = 'onError';
   static const String _eventSeekComplete = 'onSeekComplete';
   static const String _eventBufferingUpdate = 'onBufferingUpdate';
   static const String _fetchLocalSongs = 'fetchLocalSongs';
-
-  /* static const String _eventPlayState = 'play_state';*/
+  static const String _writeToFile = 'writeToFile';
+  static const String _next ='next';
+  static const String _previous = 'previous';
+   //static const String _eventPlayState = 'play_state';
 
   final MethodChannel _methodChannel = const MethodChannel(_channelName);
 
-/*
-  final StreamController<int> _positionController = StreamController.broadcast();
-  final StreamController<int> _durationController = StreamController.broadcast();
-  final StreamController<void> _completeController = StreamController.broadcast();
-  final StreamController<String> _errorController = StreamController.broadcast();*/
+  final StreamController<int> _positionController =
+      StreamController.broadcast();
+  final StreamController<int> _durationController =
+      StreamController.broadcast();
+  final StreamController<int> _completeController =
+      StreamController.broadcast();
+  final StreamController<String> _errorController =
+      StreamController.broadcast();
   final StreamController<int> _seekCompleteController =
       StreamController.broadcast();
   final StreamController<ProgressBarState> _processStream =
@@ -48,6 +53,27 @@ class MethodChannelPlugin extends PluginPlatform {
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
     switch (call.method) {
+    /*  *//*case _eventPosition:
+        _positionController.add(call.arguments as int);
+        break;
+      case _eventDuration:
+        _durationController.add(call.arguments as int);
+        break;
+      case _eventComplete:
+        _completeController.add("complate");
+        break;*//*
+      case _eventError:
+        _errorController.add(call.arguments as String);
+        break;*/
+   /*   case 'audioMetadata':
+        var arguments = call.arguments;
+        print(arguments);*/
+      case _previous:
+        AudioManage().previous();
+        break;
+      case _next:
+        AudioManage().next();
+        break;
       case _fetchLocalSongs:
         final arguments = call.arguments;
         if (arguments is List) {
@@ -62,18 +88,23 @@ class MethodChannelPlugin extends PluginPlatform {
 
           final List<Song> songs = Song.fromJsonList(songMaps);
           final controller = Get.find<LocalMusicController>();
-          controller.localSong.value=songs;
+          controller.localSong.value = songs;
+          AudioManage().setPlaylist(songs);
         } else {
           print('Unexpected argument type.');
         }
         break;
       case _methodPlayerStateChanged:
         final String stateString = call.arguments as String;
+        if(stateString=="completed"){
+         _completeController.add(Random().nextInt(99));
+        }
         playhandleMethodCall(stateString);
         break;
       case _eventSeekComplete:
         _seekCompleteController.add(call.arguments as int);
         break;
+
       case _eventBufferingUpdate:
         var args = call.arguments;
         var progressBarState = ProgressBarState(
@@ -84,9 +115,9 @@ class MethodChannelPlugin extends PluginPlatform {
 
         _processStream.add(progressBarState);
         break;
-      /*  case _eventPlayState:
-        _handlePlayState(call.arguments as Map<String, dynamic>);
-        break;*/
+/*        case _eventPlayState:
+        _handlePlayState(call.arguments as Map<String, dynamic>);*/
+        break;
       default:
         throw MissingPluginException();
     }
@@ -138,7 +169,7 @@ class MethodChannelPlugin extends PluginPlatform {
     }
   }
 
-/*  @override
+  @override
   Stream<int> get positionStream => _positionController.stream;
 
   @override
@@ -148,7 +179,7 @@ class MethodChannelPlugin extends PluginPlatform {
   Stream<void> get completeStream => _completeController.stream;
 
   @override
-  Stream<String> get errorStream => _errorController.stream;*/
+  Stream<String> get errorStream => _errorController.stream;
 
   @override
   Stream<void> get seekCompleteStream => _seekCompleteController.stream;
@@ -168,6 +199,11 @@ class MethodChannelPlugin extends PluginPlatform {
       'album': song.albumTitle,
       'artwork': song.albumArtwork,
     });
+  }
+
+  Future<String> writeToFile(Uint8List content, String fileName) async {
+    return await _invokeMethod(
+        _writeToFile, {'content': content, 'fileName': fileName});
   }
 
   @override
@@ -190,11 +226,15 @@ class MethodChannelPlugin extends PluginPlatform {
     await _invokeMethod(_fetchLocalSongs);
   }
 
-  Future<void> _invokeMethod(String method, [dynamic arguments]) async {
+  Future<dynamic> _invokeMethod(String method, [dynamic arguments]) async {
     try {
-      await _methodChannel.invokeMethod(method, arguments);
+      return await _methodChannel.invokeMethod(method, arguments);
     } on PlatformException catch (e) {
       throw Exception("$method failed: ${e.message}");
     }
   }
+
+
+  Future<void> previous()async {}
+  Future<void> next()async {}
 }

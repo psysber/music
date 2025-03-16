@@ -4,61 +4,87 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ScrollText extends StatefulWidget {
-  final String child;
-  final TextStyle? style;
-  ScrollText({Key? key, required this.child, this.style}) : super(key: key);
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:music/app/models/song.dart';
+
+class ScrollTextController extends GetxController
+    with GetSingleTickerProviderStateMixin {
+  late AnimationController animationController;
+  late Animation<Offset> animation;
+  
+  @override
+  void onInit() {
+    super.onInit();
+    // 初始化动画控制器和动画
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 20),
+    );
+    animation = Tween<Offset>(
+      begin: const Offset(1.0, 0.0),
+      end: const Offset(-1.0, 0.0),
+    ).animate(animationController);
+    // 添加动画监听器以触发 UI 更新
+    animation.addListener(() => update());
+    // 循环播放动画
+    animationController.repeat();
+  }
+
+  // 切换动画播放状态
+  void toggleAnimation() {
+    if (animationController.isAnimating) {
+      animationController.stop();
+    } else {
+      animationController.repeat();
+    }
+  }
 
   @override
-  _ScrollTextState createState() => _ScrollTextState();
+  void onClose() {
+    animationController.dispose(); // 释放资源
+    super.onClose();
+  }
 }
 
-class _ScrollTextState extends State<ScrollText>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<Offset> _animation;
-  GlobalKey _globalKey = GlobalKey();
 
-  @override
-  void initState() {
-    super.initState();
-    _controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 20));
-    _animation = Tween<Offset>(begin: Offset(1.0, 0.0), end: Offset(-1.0, 0.0))
-        .animate(_controller);
 
-    _animation.addListener(() {
-      setState(() {});
-    });
-    _controller.repeat();
-  }
+
+class ScrollText extends StatelessWidget {
+  final String child;
+  final TextStyle? style;
+
+  const ScrollText({
+    super.key,
+    required this.child,
+    this.style,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-        child: FractionalTranslation(
-            translation: _animation.value,
-            child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: InkWell(
-                  onTap: () {
-                    if (_controller.isAnimating) {
-                      _controller.stop();
-                    } else {
-                      _controller.repeat();
-                    }
-                  },
-                  child: Text(
-                    widget.child,
-                    key: _globalKey,
-                    style: widget.style,
-                  ),
-                ))));
-  }
+    return GetBuilder<ScrollTextController>(
+      init: ScrollTextController(), // 初始化控制器
+      builder: (controller) {
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+          return FractionalTranslation(
+            translation: controller.animation.value, // 使用控制器中的动画值
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: InkWell(
+                onTap: () => controller.toggleAnimation(), // 点击切换动画状态
+                child: Text(
+                  child,
+
+                ),
+              ),
+            ),
+          );
+
+      },
+    );
   }
 }
+
+
+
+

@@ -5,15 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:music/app/component/audio_manage.dart';
-import 'package:music/app/component/audio_manage.dart';
-import 'package:music/app/component/audio_manage.dart';
+
 
 import 'package:music/app/component/notifiers/play_button_notifier.dart';
 import 'package:music/app/component/notifiers/progress_notifier.dart';
 import 'package:music/app/component/notifiers/repeat_button_notifier.dart';
 import 'package:music/app/modules/cloud_music/controllers/cloud_music_controller.dart';
 import 'package:music/app/modules/cloud_music/views/cloud_music_view.dart';
-import 'package:music/app/modules/discover/bindings/discover_binding.dart';
+
 import 'package:music/app/modules/discover/controllers/discover_controller.dart';
 import 'package:music/app/modules/discover/views/discover_view.dart';
 import 'package:music/app/modules/home/controllers/home_controller.dart';
@@ -22,13 +21,16 @@ import 'package:music/app/modules/libary/controllers/library_controller.dart';
 import 'package:music/app/modules/libary/views/library_view.dart';
 import 'package:music/app/modules/local_music/controllers/local_music_controller.dart';
 import 'package:music/app/modules/local_music/views/local_music_view.dart';
+import 'package:music/app/modules/settings/controllers/settings_controller.dart';
+import 'package:music/app/modules/settings/views/settings_view.dart';
 import 'package:music/app/utils/tab_indicator.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
-
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(AudioManage());
+
     const tabs = [
       Tab(
         text: '推荐',
@@ -41,7 +43,8 @@ class HomeView extends GetView<HomeController> {
       ),
       Tab(
         text: '云音乐',
-      )
+      ),
+
     ];
     return DefaultTabController(
         initialIndex: 0,
@@ -51,10 +54,10 @@ class HomeView extends GetView<HomeController> {
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(96.w),
               child: AppBar(
+
                 title: null,
                 automaticallyImplyLeading: false,
                 bottom: TabBar(
-
                     indicator: const TabIndicator(),
                     labelColor: const Color(0xff000000),
                     labelStyle:
@@ -78,15 +81,25 @@ class HomeView extends GetView<HomeController> {
                 builder: (controller) => const LibraryView(),
               ),
               GetBuilder<LocalMusicController>(
+                autoRemove: false,
                 init: LocalMusicController(),
                 builder: (controller) => const LocalMusicView( ),
               ),
               GetBuilder<CloudMusicController>(
+                autoRemove: false,
                 init: CloudMusicController(),
                 builder: (controller) => const CloudMusicView(),
               ),
             ]),
-            bottomNavigationBar: MusicNav()));
+            bottomNavigationBar: ValueListenableBuilder(valueListenable: controller.currentSongNotifier, builder: (_,value,__){
+
+              if(value!=null){
+                return MusicNav();
+              }else{
+                return const SizedBox();
+              }
+            })
+        ));
   }
 }
 
@@ -121,18 +134,18 @@ class AudioProcessBar extends StatelessWidget {
 }
 
 
-/*
+
 class PreviousSongButton extends StatelessWidget {
-  final audioManage = AudioManage.getInstance();
+  final audioManage = AudioManage();
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return ValueListenableBuilder<bool>(
-      valueListenable: AudioManage.isFirstSongNotifier,
+      valueListenable: audioManage.isFirstSongNotifier,
       builder: (_, isFirst, __) {
         return IconButton(
-          onPressed: (isFirst) ? null : () => audioManage?.previous(),
+          onPressed: (isFirst) ? null : () => audioManage.previous(),
           icon: const Icon(Icons.skip_previous_outlined),
         );
       },
@@ -141,13 +154,13 @@ class PreviousSongButton extends StatelessWidget {
 }
 
 class NextSongButton extends StatelessWidget {
-  final audioManage = AudioManage.instance;
+  final audioManage = AudioManage();
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return ValueListenableBuilder<bool>(
-      valueListenable: AudioManage.isLastSongNotifier,
+      valueListenable: audioManage.isLastSongNotifier,
       builder: (_, isLast, __) {
         return IconButton(
           onPressed: (isLast) ? null : audioManage.next,
@@ -157,7 +170,7 @@ class NextSongButton extends StatelessWidget {
     );
   }
 }
-*/
+
 
 class PlayButton extends StatelessWidget {
   final audioManage = AudioManage();
@@ -177,18 +190,21 @@ class PlayButton extends StatelessWidget {
             );
           case ButtonState.paused:
             return IconButton(
-              icon: const Icon(Icons.play_arrow),
+              icon: const Icon(Icons.play_circle_outline_rounded,),
               onPressed: ()=>audioManage.play(),
+              iconSize: 60.sp,
             );
           case ButtonState.playing:
             return IconButton(
               icon: const Icon(Icons.pause),
               onPressed:()=>audioManage.pause(),
+              iconSize: 60.sp,
             );
           default:
             return IconButton(
-              icon: const Icon(Icons.play_arrow),
+              icon: const Icon(Icons.play_circle_outline_rounded),
               onPressed: ()=>audioManage.play(),
+              iconSize: 60.sp,
             );
         }
       },
@@ -196,35 +212,37 @@ class PlayButton extends StatelessWidget {
   }
 }
 
-/*
+
 class RepeatButton extends StatelessWidget {
   RepeatButton({Key? key}) : super(key: key);
-  final audioManage = AudioManage.instance;
+  final audioManage = AudioManage();
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<RepeatState>(
-      valueListenable: AudioManage.repeatButtonNotifier,
+      valueListenable: audioManage.repeatButtonNotifier,
       builder: (context, value, child) {
-        Icon icon;
+        Icon ticon = Icon(Icons.repeat);
         switch (value) {
           case RepeatState.repeatPlaylist:
-            icon = const Icon(Icons.repeat);
+            ticon = const Icon(Icons.repeat);
             break;
           case RepeatState.off:
-            icon = const Icon(Icons.shuffle);
+            ticon = const Icon(Icons.shuffle);
             break;
           case RepeatState.repeatSong:
-            icon = const Icon(Icons.repeat_one);
+            ticon = const Icon(Icons.repeat_one);
             break;
+          case RepeatState.randomPlaylist:
+           ticon = const Icon(Icons.read_more);
         }
         return IconButton(
-          icon: icon,
+          icon: ticon,
           onPressed: audioManage.repeat,
         );
       },
     );
   }
 }
-*/
+
 

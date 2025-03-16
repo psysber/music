@@ -7,6 +7,8 @@ import 'package:music/app/modules/home/modules/comm_appbar.dart';
 import 'package:music/app/modules/libary/controllers/library_controller.dart';
 import 'dart:math';
 
+import '../../../routes/app_pages.dart';
+
 class LibraryView extends GetView<LibraryController> {
   const LibraryView({super.key});
   Color getRandomBrightColor() {
@@ -20,13 +22,27 @@ class LibraryView extends GetView<LibraryController> {
   Widget build(BuildContext context) {
     Get.put(LibraryController());
     final list=[
-      {'item':"歌手",'icon':Icons.perm_contact_calendar_rounded},
-      {'item':"排行",'icon':Icons.perm_contact_calendar_rounded},
-      {'item':"歌单",'icon':Icons.perm_contact_calendar_rounded},
-      {'item':"专辑",'icon':Icons.perm_contact_calendar_rounded},
-      {'item':"歌手",'icon':Icons.perm_contact_calendar_rounded},
-      {'item':"歌手",'icon':Icons.perm_contact_calendar_rounded},
-      {'item':"歌手",'icon':Icons.perm_contact_calendar_rounded},
+      {'item':"设置",'icon':Icons.settings,"function":(){
+        Get.toNamed(Routes.SETTINGS);
+      }},
+      {'item':"排行",'icon':Icons.perm_contact_calendar_rounded,"function":(){
+
+      }},
+      {'item':"歌单",'icon':Icons.perm_contact_calendar_rounded,"function":(){
+
+      }},
+      {'item':"专辑",'icon':Icons.perm_contact_calendar_rounded,"function":(){
+
+      }},
+      {'item':"歌手",'icon':Icons.perm_contact_calendar_rounded,"function":(){
+
+      }},
+      {'item':"歌手",'icon':Icons.perm_contact_calendar_rounded,"function":(){
+
+      }},
+      {'item':"歌手",'icon':Icons.perm_contact_calendar_rounded,"function":(){
+
+      }},
     ];
 
     final playlist = [
@@ -60,7 +76,7 @@ class LibraryView extends GetView<LibraryController> {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(list[index]['icon'] as IconData?,size: 48.sp,),
+                      IconButton(icon: Icon(list[index]['icon'] as IconData?),  onPressed: list[index]['function'] as VoidCallback,),
                       Text(list[index]['item'] as String,style: TextStyle(fontSize: 32.sp),)
                     ],
                   );

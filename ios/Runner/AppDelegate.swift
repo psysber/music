@@ -17,8 +17,11 @@ import AVFoundation
         
         // 注册 Flutter 插件和 PlayerWrapper
         let controller = window?.rootViewController as! FlutterViewController
-        let playerWrapper = MusicPlayerManager(binaryMessenger: controller.binaryMessenger)
-        objc_setAssociatedObject(controller, "PlayerWrapper", playerWrapper, .OBJC_ASSOCIATION_RETAIN)
+        DispatchQueue.main.async {
+            let playerWrapper = MusicPlayerManager(binaryMessenger: controller.binaryMessenger)
+            objc_setAssociatedObject(controller, "PlayerWrapper", playerWrapper, .OBJC_ASSOCIATION_RETAIN)
+        }
+      
        
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)

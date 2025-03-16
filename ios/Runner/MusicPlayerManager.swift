@@ -7,6 +7,7 @@
 import Foundation
 import MediaPlayer
 import AVFoundation
+import CommonCrypto
 
 class MusicPlayerManager: NSObject {
     private var channel: FlutterMethodChannel
@@ -74,15 +75,64 @@ class MusicPlayerManager: NSObject {
                 }
             }
         case "fetchLocalSongs":
-            
             fetchLocalSongs { songs in
                 // 在这里使用歌曲数据
                 self.channel.invokeMethod("fetchLocalSongs", arguments: songs)
+            }
+        case "writeToFile":
+            guard let args = call.arguments as? [String: Any],
+                  let fileName = args["fileName"] as? String,
+                  let content  = args["content"] as? FlutterStandardTypedData
+            else {
+                result(FlutterError(code: "INVALID_ARGUMENTS", message: "Invalid arguments for seek", details: nil))
+                return
+            }
+            let filedata = Data(content.data)
+            do{
+                let rs = try writeToFile(content: filedata, fileName: fileName)
+                result(rs.path)
+            } catch {
+                print(error)
             }
         default:
             result(FlutterMethodNotImplemented)
         }
     }
+    
+    func writeToFile(content: Data, fileName: String) throws -> URL {
+        let fileManager = FileManager.default
+
+        do {
+            // 获取 Documents 目录
+            guard let docsDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+                throw NSError(domain: "FileError", code: 1001, userInfo: [NSLocalizedDescriptionKey: "目录不可用"])
+            }
+
+            // 创建子目录（可选）
+            let targetDir = docsDir.appendingPathComponent("MediaFiles")
+            try fileManager.createDirectory(at: targetDir, withIntermediateDirectories: true)
+
+            // 构建文件路径
+            let fileURL = targetDir.appendingPathComponent(fileName)
+
+            // 如果文件已存在，则跳过写入并直接返回文件 URL
+            if fileManager.fileExists(atPath: fileURL.path) {
+                return fileURL
+            }
+
+            // 执行写入操作
+            try content.write(to: fileURL, options: [.atomic, .completeFileProtection])
+            return fileURL
+        } catch let error as NSError {
+            // 细化错误类型
+            if error.code == NSFileWriteOutOfSpaceError {
+                throw NSError(domain: "FileError", code: 1003, userInfo: [NSLocalizedDescriptionKey: "存储空间不足"])
+            } else {
+                throw error
+            }
+        }
+    }
+    
     
     // MARK: - 音频会话配置
     private func setupAudioSession() {
@@ -167,83 +217,153 @@ class MusicPlayerManager: NSObject {
     }
     
     private func previousTrack() {
-        // 实现上一曲逻辑
+        self.channel.invokeMethod("previous",arguments:"")
     }
     
     private func nextTrack() {
-        // 实现下一曲逻辑
+       self.channel.invokeMethod("next",arguments:"")
+    }
+  
+
+    func isTargetURL(_ url: URL) -> Bool {
+        guard let scheme = url.scheme?.lowercased() else {
+            return false // 无 scheme 直接返回 false
+        }
+        // 判断是否属于 HTTP/HTTPS 或音乐库协议
+        return scheme == "http" || scheme == "https" || scheme == "ipod-library"
     }
     
-    // MARK: - 加载曲目
+    
+  
     public func loadTrack(url: String, artwork: String, artist: String, title: String, album: String) {
-        guard let url = URL(string: url) else {
+        guard let trackURL = URL(string: url) else {
+            print("❌ 无效的URL")
             return
         }
         
         cleanupObservers()
+        var playerItem: AVPlayerItem
+        if(!isTargetURL(trackURL)){
+         let filewithpath =  URL(fileURLWithPath: url)
+            
+            playerItem = AVPlayerItem(asset: AVAsset(url: filewithpath))
+        }else{
+            
+            playerItem = AVPlayerItem(url: trackURL)
+        }
         
-        let playerItem = AVPlayerItem(url: url)
+        
         player = AVPlayer(playerItem: playerItem)
-        
         setupObservers(for: playerItem)
         play()
         
-        loadArtwork(from: artwork, artist: artist, title: title, album: album)
+            var finalTitle = title
+            var finalArtist = artist
+            var finalAlbum = album
+            var embeddedArtwork: UIImage?
+          
+            let loadedImage = loadArtwork(from: artwork)
+            
+            // 2. 遍历元数据项
+            let metadata = playerItem.asset.commonMetadata
+            for metaItem in metadata {
+                switch metaItem.commonKey {
+                case .commonKeyTitle where finalTitle.isEmpty:
+                    finalTitle = metaItem.stringValue ?? title
+                case .commonKeyArtist where finalArtist.isEmpty:
+                    finalArtist = metaItem.stringValue ?? artist
+                case .commonKeyAlbumName where finalAlbum.isEmpty:
+                    finalAlbum = metaItem.stringValue ?? album
+                case .commonKeyArtwork:
+                    if let data = metaItem.dataValue {
+                        embeddedArtwork = UIImage(data: data)
+                    }
+                default:
+                    break
+                }
+            }
+            
+            // 3. 优先使用嵌入的艺术作品，否则使用加载的图像
+            let finalArtwork = embeddedArtwork ?? loadedImage
+            
+            // 更新正在播放的信息
+            updateNowPlayingInfo(with: finalArtwork, artist: finalArtist, title: finalTitle, album: finalAlbum)
+        
     }
+
+
+
     
-    private func loadArtwork(from urlString: String, artist: String, title: String, album: String) {
+    private func isMediaLibraryURL(_ url: URL) -> Bool {
+             return url.scheme?.lowercased() == "ipod-library"
+         }
+         
+    
+ 
+
+    private func loadArtwork(from urlString: String) -> UIImage? {
         // 检查是否是 HTTP/HTTPS URL
         if urlString.lowercased().hasPrefix("http://") || urlString.lowercased().hasPrefix("https://") {
             // 处理普通 URL
-            loadArtworkFromURL(urlString, artist: artist, title: title, album: album)
+            return loadArtworkFromURL(urlString)
         } else {
             // 假设是 Base64 图像数据
-            loadArtworkFromBase64(urlString, artist: artist, title: title, album: album)
+            return loadArtworkFromBase64(urlString)
         }
     }
 
-    private func loadArtworkFromURL(_ urlString: String, artist: String, title: String, album: String) {
+    private func loadArtworkFromURL(_ urlString: String) -> UIImage? {
         // 清理 URL 字符串（去除空格和非法字符）
         let cleanedUrlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         
         // 检查 URL 是否有效
         guard let artworkUrl = URL(string: cleanedUrlString), !cleanedUrlString.isEmpty else {
             print("无效的 URL: \(urlString)")
-            return
+            return nil
         }
 
         // 使用 URLSession 加载图片数据
-        URLSession.shared.dataTask(with: artworkUrl) { [weak self] data, response, error in
-            // 检查 self 是否存在，数据是否有效，以及是否有错误
-            guard let self = self, let data = data, error == nil else {
+        var image: UIImage?
+        let semaphore = DispatchSemaphore(value: 0)
+
+        URLSession.shared.dataTask(with: artworkUrl) { data, response, error in
+            // 检查数据是否有效，以及是否有错误
+            guard let data = data, error == nil else {
                 print("加载图片失败: \(error?.localizedDescription ?? "未知错误")")
+                semaphore.signal()
                 return
             }
 
             // 将数据转换为 UIImage
-            if let image = UIImage(data: data) {
-                // 更新正在播放的信息
-                self.updateNowPlayingInfo(with: image, artist: artist, title: title, album: album)
-            } else {
+            image = UIImage(data: data)
+            if image == nil {
                 print("无法将数据转换为图片")
             }
+            semaphore.signal()
         }.resume()
+
+        semaphore.wait()
+        return image
     }
 
-    private func loadArtworkFromBase64(_ base64String: String, artist: String, title: String, album: String) {
+    private func loadArtworkFromBase64(_ base64String: String) -> UIImage? {
         // 将 Base64 字符串解码为 Data
         if let imageData = Data(base64Encoded: base64String) {
             // 将 Data 转换为 UIImage
             if let image = UIImage(data: imageData) {
-                // 更新正在播放的信息
-                self.updateNowPlayingInfo(with: image, artist: artist, title: title, album: album)
+                return image
             } else {
                 print("Base64 数据无法转换为图片")
             }
         } else {
             print("Base64 数据无效")
         }
+        return nil
     }
+
+
+
+
     
     private func updateNowPlayingInfo(with image: UIImage? = nil, artist: String, title: String, album: String) {
         var nowPlayingInfo = [String: Any]()
@@ -390,6 +510,31 @@ class MusicPlayerManager: NSObject {
             }
         }
     }
+           
+    private func getLocalFilePath(for url: URL) -> URL {
+           let fileName = generateFileName(from: url)
+           return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+               .appendingPathComponent(fileName)
+       }
+
+       private func localFileExists(for url: URL) -> Bool {
+           let filePath = getLocalFilePath(for: url)
+           return FileManager.default.fileExists(atPath: filePath.path)
+       }
+
+       private func generateFileName(from url: URL) -> String {
+           let urlString = url.absoluteString
+           let data = Data(urlString.utf8)
+           var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
+
+           data.withUnsafeBytes {
+               CC_MD5($0.baseAddress, CC_LONG(data.count), &digest)
+           }
+
+           let md5Hex = digest.map { String(format: "%02hhx", $0) }.joined()
+           return "\(md5Hex).\(url.pathExtension)"
+       }
+    
     
     
 }
