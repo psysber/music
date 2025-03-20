@@ -62,6 +62,7 @@
 ---
 
 #运行界面
-
-
+![image](https://github.com/user-attachments/assets/ad9e52bc-3714-4992-800f-0295f16e06bb)
+![image](https://github.com/user-attachments/assets/37aa5adc-03c4-46bd-987c-3dfc9d5840e7)
+![image](https://github.com/user-attachments/assets/a1187f1a-96e6-4192-aeb3-ea284bbde69e)
 **Enjoy your music!** 🎵
