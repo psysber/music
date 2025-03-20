@@ -61,8 +61,13 @@
 
 ---
 
-#真机运行界面
+## 真机运行界面
 ![image](https://github.com/user-attachments/assets/21266c69-283c-466b-8304-c7111243fd76)
 ![image](https://github.com/user-attachments/assets/37aa5adc-03c4-46bd-987c-3dfc9d5840e7)
 ![image](https://github.com/user-attachments/assets/a1187f1a-96e6-4192-aeb3-ea284bbde69e)
+
+
+
+# 如果喜欢请点个star
+
 **Enjoy your music!** 🎵
