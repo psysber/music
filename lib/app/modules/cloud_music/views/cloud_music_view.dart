@@ -101,7 +101,17 @@ class CloudMusicView extends GetView<CloudMusicController> {
       child: CircularProgressIndicator(),
     ),
       onError: (error) => Center(
-        child: Text(error!),
+          child: SizedBox(
+            width: 500.w,
+            height: 150.w,
+            child: Column(
+                children: [
+                  Text("获取失败,点击重试"),
+                  IconButton(onPressed:controller.clear, icon: Icon(Icons.refresh))
+                ]),
+          )
+
+
       ),
       onEmpty: Center(
         child: Text('暂无数据'),

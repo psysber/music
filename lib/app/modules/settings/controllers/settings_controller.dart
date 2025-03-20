@@ -52,10 +52,7 @@ class SettingsController extends GetxController {
     Future.delayed(Duration(milliseconds: 100 * fullText.length + 500), () {
       showPrompt.value = false;
     });
-    final list = await Lanzhou().init();
-    if(list!=null){
-     musicController.change(list,status: RxStatus.success());
-    }
+
   }
 
   Future<void> handleButtonPress() async {
