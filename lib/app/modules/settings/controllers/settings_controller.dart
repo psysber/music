@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:music/app/component/lanzhou.dart';
+import 'package:music/app/modules/cloud_music/controllers/cloud_music_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class SettingsController extends GetxController {
   final TextEditingController linkController = TextEditingController();
@@ -35,7 +37,8 @@ class SettingsController extends GetxController {
     await prefs.setString('share_password', passwordController.text);
   }
 
-  void _showTypewriterEffect() {
+  Future<void> _showTypewriterEffect() async {
+    var musicController = Get.put(CloudMusicController());
     const fullText = '分享更新成功';
     promptText.value = '';
     showPrompt.value = true;
@@ -49,6 +52,10 @@ class SettingsController extends GetxController {
     Future.delayed(Duration(milliseconds: 100 * fullText.length + 500), () {
       showPrompt.value = false;
     });
+    final list = await Lanzhou().init();
+    if(list!=null){
+     musicController.change(list,status: RxStatus.success());
+    }
   }
 
   Future<void> handleButtonPress() async {

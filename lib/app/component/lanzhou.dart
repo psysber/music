@@ -5,12 +5,15 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:audio_metadata_extractor/audio_metadata_extractor.dart';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:music/app/models/song.dart';
+import 'package:music/app/routes/app_pages.dart';
 import 'package:music/platform/plugin_platform_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import  'package:dio/src/form_data.dart' as toData;
 class RateLimiter {
   final int rateLimit; // 速率限制，单位秒
   int lastRequestTime = 0;
@@ -167,10 +170,14 @@ class Lanzhou {
 
     while (attempt < maxRetries) {
       try {
+        final link  = _prefs.getString('share_link');
+        final password = _prefs.getString('share_password')  ;
+        if(link == null || password == null) Get.toNamed(Routes.SETTINGS);
         final fileList = await getAllFileListByUrl(
-          'https://tap-link.lanzoup.com/b00mp8ijgf',
-          pwd: '6l8j',
+        link!,
+        pwd: password!,
         );
+
 
         final list = <Map<String, String>>[];
         for (final file in fileList) {
@@ -251,7 +258,7 @@ class Lanzhou {
   Future<List<dynamic>> getFileListByData(Map<String, dynamic> data,
       int pg) async {
     final url = 'https://wwjn.lanzout.com/filemoreajax.php?file=${data['fid']}';
-    final formData = FormData.fromMap({...data, 'pg': pg});
+    final formData = toData.FormData.fromMap({...data, 'pg': pg});
 
     try {
       final response = await dio.post(url, data: formData);
